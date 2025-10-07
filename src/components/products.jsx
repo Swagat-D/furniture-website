@@ -1,8 +1,10 @@
 "use client"
 
+import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useCart } from "./cart-context"
+import { useAuth } from "./auth-context"
 
 const products = [
   { id: 1, name: "Walnut Coffee Table", price: "₹12,999", image: "/walnut-coffee-table-with-decor.jpg" },
@@ -15,14 +17,41 @@ const products = [
 
 export default function Products() {
   const { addToCart } = useCart()
+  const { user } = useAuth()
+  const [loadingStates, setLoadingStates] = useState({})
   const toNumber = (s) => Number(String(s).replace(/[^\d.]/g, "")) || 0
+
+  const handleAddToCart = async (product) => {
+    setLoadingStates(prev => ({ ...prev, [product.id]: true }))
+    
+    try {
+      await addToCart({ 
+        id: String(product.id), 
+        name: product.name, 
+        image: product.image, 
+        priceNumber: toNumber(product.price),
+        price: toNumber(product.price),
+        quantity: 1
+      })
+      
+      // Show success feedback
+      setTimeout(() => {
+        setLoadingStates(prev => ({ ...prev, [product.id]: false }))
+      }, 500)
+      
+    } catch (error) {
+      console.error('Error adding to cart:', error)
+      setLoadingStates(prev => ({ ...prev, [product.id]: false }))
+      alert('Failed to add item to cart. Please try again.')
+    }
+  }
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {products.map((p) => (
         <Card key={p.id} className="overflow-hidden">
           <div className="aspect-[4/3] w-full overflow-hidden">
-            <img src={p.image || "/placeholder.svg"} alt={p.name} className="h-full w-full object-cover" />
+            <img src={p.image || "/placeholder-logo.png"} alt={p.name} className="h-full w-full object-cover" />
           </div>
           <div className="p-4">
             <div className="flex items-center justify-between">
@@ -31,12 +60,11 @@ export default function Products() {
             </div>
             <div className="mt-4">
               <Button
-                className="w-full bg-primary text-primary-foreground"
-                onClick={() =>
-                  addToCart({ id: String(p.id), name: p.name, imageUrl: p.image, priceNumber: toNumber(p.price) })
-                }
+                className="w-full bg-primary text-primary-foreground disabled:opacity-50"
+                disabled={loadingStates[p.id]}
+                onClick={() => handleAddToCart(p)}
               >
-                Add to Cart
+                {loadingStates[p.id] ? 'Adding...' : 'Add to Cart'}
               </Button>
             </div>
           </div>

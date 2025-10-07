@@ -7,7 +7,7 @@ export function ProductCard({ product }) {
     <Card className="group overflow-hidden">
       <div className="aspect-[4/3] w-full overflow-hidden">
         <img
-          src={product.imageUrl || "/placeholder.svg"}
+          src={product.imageUrl || "/placeholder-logo.png"}
           alt={product.imageAlt}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />

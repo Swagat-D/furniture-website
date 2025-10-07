@@ -8,21 +8,49 @@ import { Textarea } from "@/components/ui/textarea"
 export default function ContactSection() {
   const [status, setStatus] = useState("")
   const [showSuccess, setShowSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
+    subject: "",
     message: ""
   })
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault()
-    setStatus("Thanks! We'll get back to you within 24 hours.")
-    setShowSuccess(true)
-    setTimeout(() => {
-      setShowSuccess(false)
-      setStatus("")
-      setFormData({ name: "", email: "", message: "" })
-    }, 800)
+    setLoading(true)
+    setError("")
+    setStatus("")
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setStatus(data.message)
+        setShowSuccess(true)
+        setTimeout(() => {
+          setShowSuccess(false)
+          setStatus("")
+          setFormData({ name: "", email: "", phone: "", subject: "", message: "" })
+        }, 3000)
+      } else {
+        setError(data.error || 'Failed to send message')
+      }
+    } catch (err) {
+      setError('Network error. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -67,18 +95,26 @@ export default function ContactSection() {
           </div>
         </div>
         <form onSubmit={onSubmit} className="bg-white rounded-2xl border border-amber-100 p-6 shadow-lg space-y-4">
+          {error && (
+            <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded">
+              {error}
+            </div>
+          )}
+          
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-slate-700">Name</label>
+            <label className="text-sm font-medium text-slate-700">Name *</label>
             <Input 
               required 
               placeholder="Your name" 
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
               className="border-amber-200 focus:border-amber-400"
+              disabled={loading}
             />
           </div>
+          
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-slate-700">Email</label>
+            <label className="text-sm font-medium text-slate-700">Email *</label>
             <Input 
               required 
               type="email" 
@@ -86,10 +122,35 @@ export default function ContactSection() {
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
               className="border-amber-200 focus:border-amber-400"
+              disabled={loading}
             />
           </div>
+          
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-slate-700">Project Details</label>
+            <label className="text-sm font-medium text-slate-700">Phone</label>
+            <Input 
+              type="tel" 
+              placeholder="+91 90000 00000" 
+              value={formData.phone}
+              onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              className="border-amber-200 focus:border-amber-400"
+              disabled={loading}
+            />
+          </div>
+          
+          <div className="grid gap-2">
+            <label className="text-sm font-medium text-slate-700">Subject</label>
+            <Input 
+              placeholder="General Inquiry" 
+              value={formData.subject}
+              onChange={(e) => setFormData({...formData, subject: e.target.value})}
+              className="border-amber-200 focus:border-amber-400"
+              disabled={loading}
+            />
+          </div>
+          
+          <div className="grid gap-2">
+            <label className="text-sm font-medium text-slate-700">Project Details *</label>
             <Textarea 
               required 
               rows={4} 
@@ -97,11 +158,18 @@ export default function ContactSection() {
               value={formData.message}
               onChange={(e) => setFormData({...formData, message: e.target.value})}
               className="border-amber-200 focus:border-amber-400"
+              disabled={loading}
             />
           </div>
-          <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 rounded-xl transition-all duration-200 transform hover:scale-105">
-            Send message
+          
+          <Button 
+            type="submit" 
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 rounded-xl transition-all duration-200 transform hover:scale-105"
+            disabled={loading}
+          >
+            {loading ? 'Sending...' : 'Send message'}
           </Button>
+          
           {status && !showSuccess && <p className="text-sm text-green-600">{status}</p>}
         </form>
       </div>

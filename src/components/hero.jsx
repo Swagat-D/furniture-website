@@ -25,7 +25,7 @@ export default function Hero() {
         {slides.map((src, i) => (
           <img
             key={src}
-            src={src || "/placeholder.svg"}
+            src={src || "/placeholder-logo.png"}
             alt="Showcase furniture and interiors"
             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${i === index ? "opacity-100" : "opacity-0"}`}
           />

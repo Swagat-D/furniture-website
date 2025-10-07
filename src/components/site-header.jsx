@@ -15,45 +15,72 @@ export function SiteHeader() {
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [cartPanelOpen, setCartPanelOpen] = useState(false)
   const [authMode, setAuthMode] = useState("login") // "login", "signup", "forgot", "otp", "reset"
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [otp, setOtp] = useState("")
   const [forgotEmail, setForgotEmail] = useState("")
   const [newPassword, setNewPassword] = useState("")
+  const [authLoading, setAuthLoading] = useState(false)
   
   const { items, updateQty, removeFromCart, total, clearCart } = useCart()
   const { user, login, signup, logout } = useAuth()
   
-  const handleAuthSubmit = (e) => {
+  const handleAuthSubmit = async (e) => {
     e.preventDefault()
-    if (authMode === "login") {
-      login(email, password)
-      setAuthModalOpen(false)
-    } else if (authMode === "signup") {
-      signup(email, password)
-      setAuthModalOpen(false)
-    } else if (authMode === "forgot") {
-      // Simulate sending OTP
-      console.log("Sending OTP to:", forgotEmail)
-      setAuthMode("otp")
-    } else if (authMode === "otp") {
-      // Verify OTP
-      console.log("Verifying OTP:", otp)
-      setAuthMode("reset")
-    } else if (authMode === "reset") {
-      // Reset password
-      if (newPassword === confirmPassword) {
-        console.log("Password reset successful")
-        setAuthModalOpen(false)
-        resetForm()
-      } else {
-        alert("Passwords don't match!")
+    setAuthLoading(true)
+    
+    try {
+      if (authMode === "login") {
+        const result = await login(email, password)
+        if (result.success) {
+          setAuthModalOpen(false)
+          resetForm()
+        } else {
+          alert(result.error || 'Login failed')
+        }
+      } else if (authMode === "signup") {
+        if (password !== confirmPassword) {
+          alert("Passwords don't match!")
+          setAuthLoading(false)
+          return
+        }
+        const result = await signup(name, email, password)
+        if (result.success) {
+          setAuthModalOpen(false)
+          resetForm()
+        } else {
+          alert(result.error || 'Signup failed')
+        }
+      } else if (authMode === "forgot") {
+        // Simulate sending OTP
+        console.log("Sending OTP to:", forgotEmail)
+        setAuthMode("otp")
+      } else if (authMode === "otp") {
+        // Verify OTP
+        console.log("Verifying OTP:", otp)
+        setAuthMode("reset")
+      } else if (authMode === "reset") {
+        // Reset password
+        if (newPassword === confirmPassword) {
+          console.log("Password reset successful")
+          setAuthModalOpen(false)
+          resetForm()
+        } else {
+          alert("Passwords don't match!")
+        }
       }
+    } catch (error) {
+      console.error('Auth error:', error)
+      alert(error.message || 'An error occurred')
+    } finally {
+      setAuthLoading(false)
     }
   }
   
   const resetForm = () => {
+    setName("")
     setEmail("")
     setPassword("")
     setConfirmPassword("")
@@ -61,6 +88,7 @@ export function SiteHeader() {
     setForgotEmail("")
     setNewPassword("")
     setAuthMode("login")
+    setAuthLoading(false)
   }
   
   const handleModalClose = () => {
@@ -68,6 +96,23 @@ export function SiteHeader() {
     resetForm()
   }
   
+  const handleCheckout = () => {
+    if (!user) {
+      setAuthModalOpen(true)
+      setCartPanelOpen(false)
+      return
+    }
+
+    if (items.length === 0) {
+      alert('Your cart is empty!')
+      return
+    }
+
+    // Redirect to checkout page
+    setCartPanelOpen(false)
+    window.location.href = '/checkout'
+  }
+
   const NavLinks = () => (
     <ul className="flex flex-col lg:flex-row gap-4 lg:gap-6 xl:gap-8 text-sm lg:text-[14px] xl:text-[15px]">
       <li>
@@ -122,7 +167,7 @@ export function SiteHeader() {
           {/* Login Button or User Info */}
           {user ? (
             <div className="hidden md:flex items-center gap-2">
-              <span className="text-sm text-white truncate max-w-[100px] lg:max-w-[120px]">Hi, {user.email}</span>
+              <span className="text-sm text-white truncate max-w-[100px] lg:max-w-[120px]">Hi, {user.name || user.email}</span>
               <Button 
                 onClick={logout}
                 variant="outline" 
@@ -276,9 +321,10 @@ export function SiteHeader() {
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+                  disabled={authLoading}
+                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Sign In
+                  {authLoading ? 'Signing In...' : 'Sign In'}
                 </Button>
                 <div className="text-center pt-4 border-t border-gray-100">
                   <div className="space-y-3">
@@ -304,6 +350,17 @@ export function SiteHeader() {
 
             {authMode === "signup" && (
               <>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700">Full Name</label>
+                  <Input 
+                    type="text" 
+                    placeholder="Enter your full name" 
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="w-full h-12 px-4 text-base border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                  />
+                </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-gray-700">Email Address</label>
                   <Input 
@@ -337,9 +394,10 @@ export function SiteHeader() {
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+                  disabled={authLoading}
+                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Create Account
+                  {authLoading ? 'Creating Account...' : 'Create Account'}
                 </Button>
                 <div className="text-center pt-4 border-t border-gray-100">
                   <button 
@@ -368,9 +426,10 @@ export function SiteHeader() {
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+                  disabled={authLoading}
+                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Send Reset Code
+                  {authLoading ? 'Sending...' : 'Send Reset Code'}
                 </Button>
                 <div className="text-center pt-4 border-t border-gray-100">
                   <button 
@@ -406,9 +465,10 @@ export function SiteHeader() {
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+                  disabled={authLoading}
+                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Verify Code
+                  {authLoading ? 'Verifying...' : 'Verify Code'}
                 </Button>
                 <div className="text-center pt-4 border-t border-gray-100">
                   <button 
@@ -446,9 +506,10 @@ export function SiteHeader() {
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+                  disabled={authLoading}
+                  className="w-full h-12 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Update Password
+                  {authLoading ? 'Updating...' : 'Update Password'}
                 </Button>
               </>
             )}
@@ -499,7 +560,7 @@ export function SiteHeader() {
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-4 p-4 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
                     <img
-                      src={item.imageUrl || "/placeholder.svg"}
+                      src={item.imageUrl || "/placeholder-logo.png"}
                       alt={item.name}
                       className="h-16 w-16 sm:h-20 sm:w-20 rounded-lg object-cover flex-shrink-0 border border-gray-200"
                     />
@@ -556,8 +617,12 @@ export function SiteHeader() {
                 <span className="font-bold text-2xl text-gray-900">₹{total.toLocaleString("en-IN")}</span>
               </div>
               <div className="flex gap-3">
-                <Button className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
-                  Proceed to Checkout
+                <Button 
+                  onClick={() => handleCheckout()}
+                  disabled={!user}
+                  className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {user ? 'Proceed to Checkout' : 'Login to Checkout'}
                 </Button>
                 <Button 
                   variant="outline" 

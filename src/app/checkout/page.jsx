@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/card'
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { user } = useAuth()
+  const { user, token } = useAuth()
   const { items, total, clearCart } = useCart()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -45,6 +45,8 @@ export default function CheckoutPage() {
     setLoading(true)
 
     try {
+      console.log('Placing order with token:', !!token)
+      
       const orderItems = items.map(item => ({
         productId: item.id,
         quantity: item.qty
@@ -54,8 +56,8 @@ export default function CheckoutPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
-        credentials: 'include',
         body: JSON.stringify({
           items: orderItems,
           shippingAddress: formData.shippingAddress,
@@ -64,7 +66,9 @@ export default function CheckoutPage() {
         }),
       })
 
+      console.log('Order response status:', response.status)
       const data = await response.json()
+      console.log('Order response data:', data)
 
       if (response.ok) {
         alert(`Order placed successfully! 

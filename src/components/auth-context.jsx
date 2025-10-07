@@ -9,14 +9,20 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [token, setToken] = useState(null) // Add token state
+  const [isInitialized, setIsInitialized] = useState(false)
 
   // Check if user is already logged in on mount
   useEffect(() => {
-    checkAuthStatus()
-  }, [])
+    // Only run once after component mounts
+    if (!isInitialized) {
+      checkAuthStatus()
+      setIsInitialized(true)
+    }
+  }, [isInitialized])
 
   const checkAuthStatus = async () => {
     try {
+      setLoading(true)
       // Check if localStorage is available (client-side only)
       if (typeof window === 'undefined') {
         setLoading(false)
@@ -31,7 +37,8 @@ export function AuthProvider({ children }) {
         return
       }
 
-      setToken(storedToken) // Set token in state
+      // Set token immediately to prevent timing issues
+      setToken(storedToken)
 
       const response = await fetch('/api/auth/me', {
         method: 'GET',
@@ -39,23 +46,31 @@ export function AuthProvider({ children }) {
           'Authorization': `Bearer ${storedToken}`,
           'Content-Type': 'application/json',
         },
+        cache: 'no-cache', // Don't cache auth checks
       })
 
       if (response.ok) {
         const data = await response.json()
         setUser(data.user)
+        console.log('Auth check successful:', data.user.email)
       } else {
         console.log('Auth check failed with status:', response.status)
-        setUser(null)
-        setToken(null)
-        localStorage.removeItem('authToken')
+        // Only remove token if it's actually invalid (401)
+        if (response.status === 401) {
+          setUser(null)
+          setToken(null)
+          localStorage.removeItem('authToken')
+        }
       }
     } catch (error) {
       console.error('Auth check failed:', error)
-      setUser(null)
-      setToken(null)
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('authToken')
+      // Don't clear auth on network errors, only on actual auth failures
+      if (error.message.includes('Invalid token')) {
+        setUser(null)
+        setToken(null)
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('authToken')
+        }
       }
     } finally {
       setLoading(false)
@@ -65,6 +80,7 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       setError(null)
+      setLoading(true)
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -94,6 +110,8 @@ export function AuthProvider({ children }) {
       const errorMessage = 'Network error. Please try again.'
       setError(errorMessage)
       return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -129,14 +147,96 @@ export function AuthProvider({ children }) {
   const forgot = async (email) => {
     try {
       setError(null)
-      // TODO: Implement forgot password API endpoint
-      console.log('Forgot password for:', email)
-      return { success: true, message: 'Password reset email sent' }
+      setLoading(true)
+      
+      console.log('Auth context: sending forgot password request for:', email)
+      const response = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      console.log('Auth context: forgot password response status:', response.status)
+      const data = await response.json()
+      console.log('Auth context: forgot password response data:', data)
+
+      if (response.ok) {
+        return { success: true, message: data.message }
+      } else {
+        setError(data.error)
+        return { success: false, error: data.error }
+      }
     } catch (error) {
       console.error('Forgot password failed:', error)
       const errorMessage = 'Network error. Please try again.'
       setError(errorMessage)
       return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const verifyResetCode = async (email, code) => {
+    try {
+      setError(null)
+      setLoading(true)
+      
+      const response = await fetch('/api/auth/verify-reset-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, code }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        return { success: true, message: data.message }
+      } else {
+        setError(data.error)
+        return { success: false, error: data.error }
+      }
+    } catch (error) {
+      console.error('Verify reset code failed:', error)
+      const errorMessage = 'Network error. Please try again.'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const resetPassword = async (email, code, newPassword) => {
+    try {
+      setError(null)
+      setLoading(true)
+      
+      const response = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, code, newPassword }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        return { success: true, message: data.message }
+      } else {
+        setError(data.error)
+        return { success: false, error: data.error }
+      }
+    } catch (error) {
+      console.error('Reset password failed:', error)
+      const errorMessage = 'Network error. Please try again.'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -174,7 +274,9 @@ export function AuthProvider({ children }) {
     error, 
     login, 
     signup, 
-    forgot, 
+    forgot,
+    verifyResetCode,
+    resetPassword,
     logout,
     checkAuthStatus 
   }), [user, token, loading, error])

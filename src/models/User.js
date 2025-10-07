@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide a password'],
     minlength: [6, 'Password must be at least 6 characters'],
-    select: false, // Don't include password in queries by default
+    select: false, 
   },
   role: {
     type: String,
@@ -34,8 +34,8 @@ const UserSchema = new mongoose.Schema({
   },
   cart: [{
     productId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product',
+      type: String, 
+      required: true,
     },
     name: String,
     price: Number,
@@ -61,6 +61,8 @@ const UserSchema = new mongoose.Schema({
       default: false,
     },
   }],
+  passwordResetToken: String,
+  passwordResetExpires: Date,
 }, {
   timestamps: true,
 });
@@ -82,7 +84,7 @@ UserSchema.methods.comparePassword = async function(candidatePassword) {
 // Method to add item to cart
 UserSchema.methods.addToCart = function(item) {
   const existingItemIndex = this.cart.findIndex(
-    cartItem => cartItem.productId.toString() === item.productId.toString()
+    cartItem => cartItem.productId === item.productId
   );
 
   if (existingItemIndex >= 0) {
@@ -97,7 +99,7 @@ UserSchema.methods.addToCart = function(item) {
 // Method to remove item from cart
 UserSchema.methods.removeFromCart = function(productId) {
   this.cart = this.cart.filter(
-    item => item.productId.toString() !== productId.toString()
+    item => item.productId !== productId
   );
   return this.save();
 };
@@ -105,7 +107,7 @@ UserSchema.methods.removeFromCart = function(productId) {
 // Method to update cart item quantity
 UserSchema.methods.updateCartItemQuantity = function(productId, quantity) {
   const item = this.cart.find(
-    cartItem => cartItem.productId.toString() === productId.toString()
+    cartItem => cartItem.productId === productId
   );
   
   if (item) {

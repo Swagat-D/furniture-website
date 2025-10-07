@@ -25,6 +25,7 @@ export async function authenticateUser(request) {
 
     return { user, error: null };
   } catch (error) {
+    console.error('Auth middleware error:', error);
     return { user: null, error: error.message };
   }
 }

@@ -10,7 +10,7 @@ export default function CartPanel() {
   const { items, updateQty, removeFromCart, total, clearCart, loading, error } = useCart()
   const [open, setOpen] = useState(false)
 
-  const totalQuantity = items.reduce((n, i) => n + (i.quantity || 0), 0)
+  const totalQuantity = items.reduce((n, i) => n + (i.qty || 0), 0)
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -50,31 +50,31 @@ export default function CartPanel() {
           )}
           
           {items.map((item) => (
-            <div key={item.productId} className="flex gap-3 items-center">
+            <div key={item.id} className="flex gap-3 items-center">
               <img
-                src={item.image || "/placeholder-logo.png"}
+                src={item.imageUrl || "/placeholder-logo.png"}
                 alt={item.name}
                 className="h-14 w-14 rounded-md object-cover"
               />
               <div className="flex-1">
                 <div className="font-medium">{item.name}</div>
-                <div className="text-sm text-muted-foreground">₹{(item.price || 0).toLocaleString("en-IN")}</div>
+                <div className="text-sm text-muted-foreground">₹{(item.priceNumber || 0).toLocaleString("en-IN")}</div>
                 <div className="flex items-center gap-2 mt-2">
                   <Button 
                     type="button" 
                     size="icon" 
                     variant="outline" 
-                    onClick={() => updateQty(item.productId, (item.quantity || 1) - 1)}
-                    disabled={loading || (item.quantity || 1) <= 1}
+                    onClick={() => updateQty(item.id, (item.qty || 1) - 1)}
+                    disabled={loading || (item.qty || 1) <= 1}
                   >
                     -
                   </Button>
-                  <span className="w-6 text-center text-sm">{item.quantity || 1}</span>
+                  <span className="w-6 text-center text-sm">{item.qty || 1}</span>
                   <Button 
                     type="button" 
                     size="icon" 
                     variant="outline" 
-                    onClick={() => updateQty(item.productId, (item.quantity || 1) + 1)}
+                    onClick={() => updateQty(item.id, (item.qty || 1) + 1)}
                     disabled={loading}
                   >
                     +
@@ -83,7 +83,7 @@ export default function CartPanel() {
               </div>
               <Button 
                 variant="ghost" 
-                onClick={() => removeFromCart(item.productId)}
+                onClick={() => removeFromCart(item.id)}
                 disabled={loading}
               >
                 Remove

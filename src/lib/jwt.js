@@ -19,10 +19,20 @@ export function verifyToken(token) {
 }
 
 export function extractTokenFromHeaders(headers) {
-  const authHeader = headers.authorization;
+  // Handle both Headers object and plain object
+  let authHeader;
+  if (headers.get && typeof headers.get === 'function') {
+    authHeader = headers.get('authorization') || headers.get('Authorization');
+  } else if (headers.authorization) {
+    authHeader = headers.authorization;
+  } else if (headers.Authorization) {
+    authHeader = headers.Authorization;
+  }
+  
   if (authHeader && authHeader.startsWith('Bearer ')) {
     return authHeader.substring(7);
   }
+  
   return null;
 }
 

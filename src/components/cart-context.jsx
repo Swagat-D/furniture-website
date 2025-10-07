@@ -41,7 +41,7 @@ export function CartProvider({ children }) {
         const transformedCart = (data.cart || []).map(item => ({
           id: item.productId || item.id,
           name: item.name,
-          imageUrl: item.image,
+          imageUrl: '/placeholder-logo.png', // Use hardcoded placeholder
           priceNumber: item.price,
           qty: item.quantity
         }))
@@ -62,7 +62,16 @@ export function CartProvider({ children }) {
     try {
       const raw = localStorage.getItem("arCart:items")
       if (raw) {
-        setItems(JSON.parse(raw))
+        const guestItems = JSON.parse(raw)
+        // Ensure guest cart items have consistent format
+        const transformedItems = guestItems.map(item => ({
+          id: item.id || item.productId,
+          name: item.name,
+          imageUrl: '/placeholder-logo.png', // Use hardcoded placeholder
+          priceNumber: item.priceNumber || item.price,
+          qty: item.qty || item.quantity || 1
+        }))
+        setItems(transformedItems)
       } else {
         setItems([])
       }
@@ -83,6 +92,7 @@ export function CartProvider({ children }) {
     try {
       setError(null)
       setLoading(true)
+      console.log('Adding to cart:', item)
 
       if (user && token) {
         // Add to backend cart
@@ -96,44 +106,47 @@ export function CartProvider({ children }) {
             productId: item.id,
             name: item.name,
             price: item.price || item.priceNumber,
-            image: item.image || '/placeholder-logo.png',
+            image: '/placeholder-logo.png', // Use hardcoded placeholder
             quantity: item.qty || item.quantity || 1,
           }),
         })
 
         if (response.ok) {
           const data = await response.json()
+          console.log('Item added to cart, updated cart:', data.cart)
           // Transform backend cart data to frontend format
-          const transformedCart = (data.cart || []).map(item => ({
-            id: item.productId || item.id,
-            name: item.name,
-            imageUrl: item.image,
-            priceNumber: item.price,
-            qty: item.quantity
+          const transformedCart = (data.cart || []).map(cartItem => ({
+            id: cartItem.productId || cartItem.id,
+            name: cartItem.name,
+            imageUrl: '/placeholder-logo.png', // Use hardcoded placeholder
+            priceNumber: cartItem.price,
+            qty: cartItem.quantity
           }))
           setItems(transformedCart)
         } else {
           const error = await response.json()
+          console.error('Failed to add to cart:', error)
           setError(error.error || 'Failed to add item to cart')
         }
       } else {
         // Add to local storage cart
+        console.log('Adding to guest cart:', item)
         setItems((prev) => {
-          const idx = prev.findIndex((p) => p.productId === item.id)
+          const idx = prev.findIndex((p) => p.id === item.id)
           let newItems
           if (idx >= 0) {
             newItems = [...prev]
             newItems[idx] = { 
               ...newItems[idx], 
-              quantity: newItems[idx].quantity + (item.qty || item.quantity || 1) 
+              qty: newItems[idx].qty + (item.qty || item.quantity || 1) 
             }
           } else {
             newItems = [...prev, { 
-              productId: item.id,
+              id: item.id,
               name: item.name,
-              price: item.price || item.priceNumber,
-              image: item.image,
-              quantity: item.qty || item.quantity || 1 
+              priceNumber: item.price || item.priceNumber,
+              imageUrl: '/placeholder-logo.png', // Use hardcoded placeholder
+              qty: item.qty || item.quantity || 1 
             }]
           }
           saveGuestCart(newItems)
@@ -169,7 +182,7 @@ export function CartProvider({ children }) {
           const transformedCart = (data.cart || []).map(item => ({
             id: item.productId || item.id,
             name: item.name,
-            imageUrl: item.image,
+            imageUrl: '/placeholder-logo.png', // Use hardcoded placeholder
             priceNumber: item.price,
             qty: item.quantity
           }))
@@ -181,7 +194,7 @@ export function CartProvider({ children }) {
       } else {
         // Remove from local storage cart
         setItems((prev) => {
-          const newItems = prev.filter((p) => p.productId !== productId)
+          const newItems = prev.filter((p) => p.id !== productId)
           saveGuestCart(newItems)
           return newItems
         })
@@ -216,7 +229,7 @@ export function CartProvider({ children }) {
           const transformedCart = (data.cart || []).map(item => ({
             id: item.productId || item.id,
             name: item.name,
-            imageUrl: item.image,
+            imageUrl: '/placeholder-logo.png', // Use hardcoded placeholder
             priceNumber: item.price,
             qty: item.quantity
           }))
@@ -229,8 +242,8 @@ export function CartProvider({ children }) {
         // Update local storage cart
         setItems((prev) => {
           const newItems = prev.map((p) => 
-            p.productId === productId 
-              ? { ...p, quantity: Math.max(1, qty) } 
+            p.id === productId 
+              ? { ...p, qty: Math.max(1, qty) } 
               : p
           )
           saveGuestCart(newItems)
@@ -279,7 +292,7 @@ export function CartProvider({ children }) {
     }
   }
 
-  const total = items.reduce((sum, it) => sum + (it.price || 0) * (it.quantity || 0), 0)
+  const total = items.reduce((sum, it) => sum + (it.priceNumber || 0) * (it.qty || 0), 0)
 
   const value = useMemo(() => ({ 
     items, 

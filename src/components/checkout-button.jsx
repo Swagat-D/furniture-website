@@ -9,7 +9,7 @@ import { useCart } from "@/components/cart-context"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 export default function CheckoutButton({ className }) {
-  const { user } = useAuth()
+  const { user, token } = useAuth()
   const { items, total, clearCart } = useCart()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -42,12 +42,12 @@ export default function CheckoutButton({ className }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
-        credentials: 'include',
         body: JSON.stringify({
           items: items.map(item => ({
-            productId: item.productId,
-            quantity: item.quantity
+            productId: item.id,
+            quantity: item.qty
           })),
           shippingAddress: formData.shippingAddress,
           phone: formData.phone,
@@ -126,8 +126,8 @@ export default function CheckoutButton({ className }) {
               <div className="space-y-2 text-sm">
                 {items.map((item, index) => (
                   <div key={index} className="flex justify-between">
-                    <span>{item.name} × {item.quantity}</span>
-                    <span>₹{(item.price * item.quantity).toLocaleString()}</span>
+                    <span>{item.name} × {item.qty}</span>
+                    <span>₹{(item.priceNumber * item.qty).toLocaleString()}</span>
                   </div>
                 ))}
                 <div className="border-t pt-2 font-medium flex justify-between">

@@ -9,7 +9,7 @@ import { useAuth } from "./auth-context"
 export default function AuthModal({ triggerClassName }) {
   const { user, login, signup, forgot, logout, loading: authLoading, error: authError } = useAuth()
   const [open, setOpen] = useState(false)
-  const [mode, setMode] = useState("login")
+  const [mode, setMode] = useState("login") // login, signup, forgot
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,17 +17,21 @@ export default function AuthModal({ triggerClassName }) {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
     setError("") // Clear errors when user types
+    setSuccess("") // Clear success when user types
   }
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    
     setLoading(true)
     setError("")
+    setSuccess("")
 
     try {
       let result
@@ -41,15 +45,26 @@ export default function AuthModal({ triggerClassName }) {
         }
         result = await signup(formData.name, formData.email, formData.password)
       } else if (mode === "forgot") {
+        if (!formData.email.trim()) {
+          setError("Email is required")
+          setLoading(false)
+          return
+        }
         result = await forgot(formData.email)
       }
 
-      if (result.success) {
-        setOpen(false)
-        setFormData({ name: "", email: "", password: "" })
-        setMode("login")
+      if (result && result.success) {
+        if (mode === "forgot") {
+          setSuccess(result.message)
+          // Reset form but don't close modal for forgot password
+          setFormData({ name: "", email: "", password: "" })
+        } else {
+          setOpen(false)
+          setFormData({ name: "", email: "", password: "" })
+          setMode("login")
+        }
       } else {
-        setError(result.error || "Something went wrong")
+        setError(result?.error || "Something went wrong")
       }
     } catch (err) {
       setError("Network error. Please try again.")
@@ -60,36 +75,44 @@ export default function AuthModal({ triggerClassName }) {
 
   const handleLogout = async () => {
     await logout()
-  }
-
-  if (authLoading) {
-    return (
-      <div className="flex items-center gap-3">
-        <span className="text-sm">Loading...</span>
-      </div>
-    )
+    setOpen(false)
   }
 
   if (user) {
     return (
-      <div className="flex items-center gap-3">
-        <span className="text-sm">Hi, {user.name || user.email}</span>
-        <Button variant="outline" size="sm" onClick={handleLogout}>
-          Logout
-        </Button>
-      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant="outline" className={triggerClassName}>
+            Welcome, {user.name}
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl">Account</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">
+                <strong>Name:</strong> {user.name}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                <strong>Email:</strong> {user.email}
+              </p>
+            </div>
+            <Button onClick={handleLogout} variant="outline">
+              Logout
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     )
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={triggerClassName} onClick={() => setOpen(true)}>
-          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-          <span className="hidden sm:inline">Login / Sign up</span>
-          <span className="sm:hidden">Login</span>
+        <Button variant="outline" className={triggerClassName}>
+          Login
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
@@ -97,13 +120,19 @@ export default function AuthModal({ triggerClassName }) {
           <DialogTitle className="text-xl">
             {mode === "login" && "Welcome back"}
             {mode === "signup" && "Create your account"}
-            {mode === "forgot" && "Forgot password"}
+            {mode === "forgot" && "Reset your password"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit} className="grid gap-4">
           {(error || authError) && (
             <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded">
               {error || authError}
+            </div>
+          )}
+          
+          {success && (
+            <div className="p-3 text-sm text-green-600 bg-green-50 border border-green-200 rounded">
+              {success}
             </div>
           )}
           
@@ -162,7 +191,7 @@ export default function AuthModal({ triggerClassName }) {
               <>
                 {mode === "login" && "Login"}
                 {mode === "signup" && "Sign up"}
-                {mode === "forgot" && "Send reset link"}
+                {mode === "forgot" && "Send Reset Instructions"}
               </>
             )}
           </Button>
@@ -175,6 +204,7 @@ export default function AuthModal({ triggerClassName }) {
                   onClick={() => {
                     setMode("signup")
                     setError("")
+                    setSuccess("")
                     setFormData({ name: "", email: "", password: "" })
                   }} 
                   className="underline hover:text-foreground"
@@ -187,6 +217,7 @@ export default function AuthModal({ triggerClassName }) {
                   onClick={() => {
                     setMode("forgot")
                     setError("")
+                    setSuccess("")
                     setFormData({ name: "", email: "", password: "" })
                   }} 
                   className="underline hover:text-foreground"
@@ -203,6 +234,7 @@ export default function AuthModal({ triggerClassName }) {
                   onClick={() => {
                     setMode("login")
                     setError("")
+                    setSuccess("")
                     setFormData({ name: "", email: "", password: "" })
                   }} 
                   className="underline hover:text-foreground"

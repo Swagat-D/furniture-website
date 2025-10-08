@@ -252,17 +252,34 @@ export function SiteHeader() {
 
           {/* Login Button or User Info */}
           {user ? (
-            <div className="hidden md:flex items-center gap-2">
-              <span className="text-sm text-white truncate max-w-[100px] lg:max-w-[120px]">Hi, {user.name || user.email}</span>
+            <>
+              {/* Desktop User Info */}
+              <div className="hidden md:flex items-center gap-2">
+                <span className="text-sm text-white truncate max-w-[100px] lg:max-w-[120px]">Hi, {user.name || user.email}</span>
+                <Button 
+                  onClick={logout}
+                  variant="outline" 
+                  size="sm"
+                  className="border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors"
+                >
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1" />
+                  </svg>
+                  <span className="hidden lg:inline xl:inline">Logout</span>
+                </Button>
+              </div>
+              {/* Mobile Logout Button */}
               <Button 
                 onClick={logout}
                 variant="outline" 
                 size="sm"
-                className="border-white text-white hover:bg-white hover:text-slate-800 text-xs px-2 py-1 font-medium bg-transparent"
+                className="md:hidden border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors"
               >
-                Logout
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1" />
+                </svg>
               </Button>
-            </div>
+            </>
           ) : (
             <Button 
               onClick={() => setAuthModalOpen(true)}
@@ -280,6 +297,7 @@ export function SiteHeader() {
           <Button 
             onClick={() => setCartPanelOpen(true)}
             variant="outline" 
+            size="sm"
             className="border-white text-white hover:bg-white hover:text-slate-800 relative bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm"
           >
             <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-0 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

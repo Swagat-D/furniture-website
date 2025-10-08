@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
-import { sendEmail, emailTemplates } from '@/lib/email';
+import { sendEmail, sendEmailToMultiple, emailTemplates, getAdminEmails } from '@/lib/email';
 
 export async function POST(request) {
   try {
-    const { name, email, phone, subject, message } = await request.json();
+    const { fullName, email, phone, inquiryType, briefSubject, projectRequirements } = await request.json();
 
     // Validate input
-    if (!name || !email || !message) {
+    if (!fullName || !email || !phone || !inquiryType || !briefSubject || !projectRequirements) {
       return NextResponse.json(
-        { error: 'Name, email, and message are required' },
+        { error: 'All required fields must be filled' },
         { status: 400 }
       );
     }
@@ -24,33 +24,70 @@ export async function POST(request) {
 
     // Prepare email data
     const emailData = {
-      name,
+      fullName,
       email,
       phone,
-      subject,
-      message
+      inquiryType,
+      briefSubject,
+      projectRequirements
     };
 
-    // Send email to admin
+    // Send email to multiple admins
+    const adminEmails = getAdminEmails();
+    if (adminEmails.length === 0) {
+      console.warn('No admin emails configured');
+      return NextResponse.json(
+        { error: 'Email configuration error. Please try again later.' },
+        { status: 500 }
+      );
+    }
+
     const template = emailTemplates.contactForm(emailData);
-    const result = await sendEmail({
-      to: process.env.ADMIN_EMAIL,
+    const results = await sendEmailToMultiple({
+      recipients: adminEmails,
       subject: template.subject,
       html: template.html,
       text: template.text
     });
 
-    if (!result.success) {
-      console.error('Failed to send contact email:', result.error);
+    // Check if at least one email was sent successfully
+    const successfulEmails = results.filter(result => result.success);
+    if (successfulEmails.length === 0) {
+      console.error('Failed to send contact emails to any admin:', results);
       return NextResponse.json(
         { error: 'Failed to send message. Please try again later.' },
         { status: 500 }
       );
     }
 
+    // Log results
+    results.forEach(result => {
+      if (result.success) {
+        console.log(`Contact email sent successfully to ${result.recipient}`);
+      } else {
+        console.error(`Failed to send contact email to ${result.recipient}:`, result.error);
+      }
+    });
+
+    // Send confirmation email to customer
+    const customerTemplate = emailTemplates.customerContactConfirmation(emailData);
+    const customerEmailResult = await sendEmail({
+      to: email,
+      subject: customerTemplate.subject,
+      html: customerTemplate.html,
+      text: customerTemplate.text
+    });
+
+    if (!customerEmailResult.success) {
+      console.error('Failed to send customer confirmation email:', customerEmailResult.error);
+      // Don't fail if customer email fails, admin emails were sent successfully
+    } else {
+      console.log('Customer confirmation email sent successfully');
+    }
+
     return NextResponse.json(
       { 
-        message: 'Message sent successfully! We will get back to you soon.',
+        message: 'Message sent successfully! We will get back to you within 24 hours.',
         success: true 
       },
       { status: 200 }

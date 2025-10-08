@@ -5,6 +5,9 @@ import Products from "@/components/products"
 import ServicesScroller from "@/components/services-scroller"
 import QuickCalculator from "@/components/quick-calculator"
 import ContactSection from "@/components/contact-section"
+import { CtaBanner } from "@/components/cta-banner"
+import { WhyChooseUs } from "@/components/why-choose-us"
+import ChatPopup from "@/components/chat-popup"
 
 export default function HomePage() {
   return (
@@ -49,6 +52,15 @@ export default function HomePage() {
       <section id="contact" className="container mx-auto px-4 py-12 md:py-16 animate-fade-in-up">
         <ContactSection />
       </section>
+
+      {/* CTA Banner - Moved after contact section */}
+      <CtaBanner />
+
+      {/* Why Choose Us Section */}
+      <WhyChooseUs />
+
+      {/* Chat Popup */}
+      <ChatPopup />
     </>
   )
 }

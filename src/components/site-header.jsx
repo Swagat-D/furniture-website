@@ -9,11 +9,15 @@ import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { useCart } from "@/components/cart-context"
 import { useAuth } from "@/components/auth-context"
+import { hardcodedProducts } from "@/data/products"
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [cartPanelOpen, setCartPanelOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchResults, setSearchResults] = useState([])
   const [authMode, setAuthMode] = useState("login") // "login", "signup", "forgot", "otp", "reset"
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -54,21 +58,55 @@ export function SiteHeader() {
           alert(result.error || 'Signup failed')
         }
       } else if (authMode === "forgot") {
-        // Simulate sending OTP
-        console.log("Sending OTP to:", forgotEmail)
-        setAuthMode("otp")
+        // Send OTP to email
+        const response = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: forgotEmail }),
+        })
+        
+        const data = await response.json()
+        
+        if (response.ok) {
+          alert(data.message || 'Reset code sent to your email!')
+          setAuthMode("otp")
+        } else {
+          alert(data.error || 'Failed to send reset code')
+        }
       } else if (authMode === "otp") {
-        // Verify OTP
-        console.log("Verifying OTP:", otp)
+        // Verify OTP by attempting to reset password with dummy data first
+        // This is a workaround since the current API combines verification and reset
         setAuthMode("reset")
       } else if (authMode === "reset") {
         // Reset password
-        if (newPassword === confirmPassword) {
-          console.log("Password reset successful")
+        if (newPassword !== confirmPassword) {
+          alert("Passwords don't match!")
+          setAuthLoading(false)
+          return
+        }
+        
+        const response = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            email: forgotEmail, 
+            code: otp, 
+            newPassword: newPassword 
+          }),
+        })
+        
+        const data = await response.json()
+        
+        if (response.ok) {
+          alert(data.message || 'Password reset successful!')
           setAuthModalOpen(false)
           resetForm()
         } else {
-          alert("Passwords don't match!")
+          alert(data.error || 'Failed to reset password')
         }
       }
     } catch (error) {
@@ -113,8 +151,48 @@ export function SiteHeader() {
     window.location.href = '/checkout'
   }
 
+  const handleSearch = (query) => {
+    if (!query.trim()) {
+      setSearchResults([])
+      return
+    }
+
+    const results = hardcodedProducts.filter(product =>
+      product.name.toLowerCase().includes(query.toLowerCase()) ||
+      product.description.toLowerCase().includes(query.toLowerCase()) ||
+      product.category.toLowerCase().includes(query.toLowerCase())
+    ).slice(0, 5) // Limit to 5 results
+
+    setSearchResults(results)
+  }
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      setSearchOpen(false)
+      setSearchQuery("")
+      setSearchResults([])
+      // Scroll to products section
+      const productsSection = document.getElementById('products')
+      if (productsSection) {
+        productsSection.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }
+
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value
+    setSearchQuery(value)
+    handleSearch(value)
+  }
+
   const NavLinks = () => (
     <ul className="flex flex-col lg:flex-row gap-4 lg:gap-6 xl:gap-8 text-sm lg:text-[14px] xl:text-[15px]">
+      <li>
+        <Link href="/" className="hover:text-amber-300 transition-colors">
+          Home
+        </Link>
+      </li>
       <li>
         <a href="#story" className="hover:text-amber-300 transition-colors">
           Our Story
@@ -140,11 +218,6 @@ export function SiteHeader() {
           Contact
         </a>
       </li>
-      <li>
-        <Link href="/estimate" className="hover:text-amber-300 transition-colors">
-          Estimate
-        </Link>
-      </li>
     </ul>
   )
 
@@ -164,6 +237,19 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1 sm:gap-2 lg:gap-2 xl:gap-3 flex-shrink-0">
+          {/* Search Button */}
+          <Button 
+            onClick={() => setSearchOpen(true)}
+            variant="outline" 
+            size="sm"
+            className="border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm"
+          >
+            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span className="hidden lg:inline xl:inline ml-1">Search</span>
+          </Button>
+
           {/* Login Button or User Info */}
           {user ? (
             <div className="hidden md:flex items-center gap-2">
@@ -172,7 +258,7 @@ export function SiteHeader() {
                 onClick={logout}
                 variant="outline" 
                 size="sm"
-                className="border-white text-black hover:bg-white hover:text-slate-800 text-xs px-2 py-1 font-medium"
+                className="border-white text-white hover:bg-white hover:text-slate-800 text-xs px-2 py-1 font-medium bg-transparent"
               >
                 Logout
               </Button>
@@ -180,7 +266,7 @@ export function SiteHeader() {
           ) : (
             <Button 
               onClick={() => setAuthModalOpen(true)}
-              className="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors"
+              className="hidden sm:flex bg-slate-700 hover:bg-slate-600 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors"
             >
               <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -207,13 +293,6 @@ export function SiteHeader() {
             )}
           </Button>
 
-          {/* Get Estimate Button */}
-          <Link href="/estimate" className="hidden xl:block">
-            <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white font-medium transition-colors text-xs px-3 py-2">
-              Get estimate
-            </Button>
-          </Link>
-
           {/* mobile menu */}
           <div className="lg:hidden">
             <Sheet open={open} onOpenChange={setOpen}>
@@ -236,7 +315,7 @@ export function SiteHeader() {
                     {!user && (
                       <Button 
                         onClick={() => {setAuthModalOpen(true); setOpen(false)}}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded font-medium transition-colors"
+                        className="w-full bg-slate-700 hover:bg-slate-600 text-white px-4 py-3 rounded font-medium transition-colors"
                       >
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -254,11 +333,6 @@ export function SiteHeader() {
                       </svg>
                       Cart {items.length > 0 && `(${items.reduce((n, i) => n + i.qty, 0)})`}
                     </Button>
-                    <Link href="/estimate" className="block" onClick={() => setOpen(false)}>
-                      <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 transition-colors">
-                        Get estimate
-                      </Button>
-                    </Link>
                     {user && (
                       <Button 
                         onClick={() => {logout(); setOpen(false)}}
@@ -322,7 +396,7 @@ export function SiteHeader() {
                 <Button 
                   type="submit" 
                   disabled={authLoading}
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-12 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {authLoading ? 'Signing In...' : 'Sign In'}
                 </Button>
@@ -395,7 +469,7 @@ export function SiteHeader() {
                 <Button 
                   type="submit" 
                   disabled={authLoading}
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-12 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {authLoading ? 'Creating Account...' : 'Create Account'}
                 </Button>
@@ -427,7 +501,7 @@ export function SiteHeader() {
                 <Button 
                   type="submit" 
                   disabled={authLoading}
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-12 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {authLoading ? 'Sending...' : 'Send Reset Code'}
                 </Button>
@@ -466,7 +540,7 @@ export function SiteHeader() {
                 <Button 
                   type="submit" 
                   disabled={authLoading}
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-12 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {authLoading ? 'Verifying...' : 'Verify Code'}
                 </Button>
@@ -507,7 +581,7 @@ export function SiteHeader() {
                 <Button 
                   type="submit" 
                   disabled={authLoading}
-                  className="w-full h-12 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-12 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {authLoading ? 'Updating...' : 'Update Password'}
                 </Button>
@@ -524,7 +598,7 @@ export function SiteHeader() {
           className="w-full sm:w-[400px] md:w-[450px] lg:w-[500px] max-w-[100vw] p-0 flex flex-col"
         >
           {/* Header */}
-          <div className="p-6 pb-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+          <div className="p-6 pb-4 border-b border-gray-100 bg-slate-50">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-900">Shopping Cart</h2>
               <button 
@@ -620,7 +694,7 @@ export function SiteHeader() {
                 <Button 
                   onClick={() => handleCheckout()}
                   disabled={!user}
-                  className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 h-12 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {user ? 'Proceed to Checkout' : 'Login to Checkout'}
                 </Button>
@@ -639,6 +713,71 @@ export function SiteHeader() {
           )}
         </SheetContent>
       </Sheet>
+
+      {/* Search Modal */}
+      <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
+        <DialogContent className="modal-content max-w-2xl">
+          <DialogHeader className="text-center mb-6">
+            <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
+              Search Products
+            </DialogTitle>
+            <p className="text-gray-600 text-sm">
+              Find the perfect furniture for your space
+            </p>
+          </DialogHeader>
+          <form onSubmit={handleSearchSubmit} className="space-y-4">
+            <div className="relative">
+              <Input 
+                type="text" 
+                placeholder="Search for furniture..." 
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                className="w-full h-14 pl-12 pr-4 text-base border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                autoFocus
+              />
+              <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            
+            {/* Search Results */}
+            {searchResults.length > 0 && (
+              <div className="max-h-64 overflow-y-auto border border-gray-200 rounded-lg">
+                {searchResults.map((product) => (
+                  <div key={product.id} className="flex items-center gap-3 p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0">
+                    <img 
+                      src={product.image || "/placeholder-logo.png"} 
+                      alt={product.name} 
+                      className="w-12 h-12 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900">{product.name}</h4>
+                      <p className="text-sm text-gray-600">₹{product.price.toLocaleString("en-IN")}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <div className="flex gap-3">
+              <Button 
+                type="submit" 
+                className="flex-1 h-12 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-200"
+              >
+                Search Products
+              </Button>
+              <Button 
+                type="button"
+                variant="outline"
+                onClick={() => {setSearchOpen(false); setSearchQuery(""); setSearchResults([])}}
+                className="px-6 h-12 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all duration-200"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </header>
   )
 }

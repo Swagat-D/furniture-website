@@ -64,16 +64,12 @@ export default function QuickCalculator() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-amber-50 rounded-3xl p-8 shadow-2xl border border-amber-100">
-      <div className="text-center mb-8">
-        <h3 className="text-3xl font-bold text-slate-800 mb-2">🏠 Interior Design Calculator</h3>
-        <p className="text-slate-600">Transform your space with our smart pricing tool</p>
-      </div>
+    <div className="bg-gray-50 rounded-3xl p-6 shadow-lg border border-gray-200">
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         {/* Left Column - Inputs */}
-        <div className="space-y-6">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-amber-100">
+        <div className="space-y-4">
+          <div className="bg-white rounded-2xl p-4 shadow-md border border-gray-200">
             <h4 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
               🏡 Property Details
             </h4>
@@ -81,7 +77,7 @@ export default function QuickCalculator() {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">Property Type</label>
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="border-amber-200 focus:border-amber-400 h-12 bg-white">
+                  <SelectTrigger className="border-gray-200 focus:border-gray-400 h-10 bg-white">
                     <SelectValue placeholder="Select property type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -94,7 +90,7 @@ export default function QuickCalculator() {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">Finish Quality</label>
                 <Select value={finish} onValueChange={setFinish}>
-                  <SelectTrigger className="border-amber-200 focus:border-amber-400 h-12 bg-white">
+                  <SelectTrigger className="border-gray-200 focus:border-gray-400 h-10 bg-white">
                     <SelectValue placeholder="Select finish quality" />
                   </SelectTrigger>
                   <SelectContent>
@@ -112,7 +108,7 @@ export default function QuickCalculator() {
                   min={200} 
                   value={area} 
                   onChange={(e) => setArea(Number(e.target.value || 0))} 
-                  className="border-amber-200 focus:border-amber-400 h-12 text-lg font-semibold"
+                  className="border-gray-200 focus:border-gray-400 h-10 text-lg font-semibold"
                 />
               </div>
 
@@ -123,7 +119,7 @@ export default function QuickCalculator() {
                   min={0} 
                   value={bedrooms} 
                   onChange={(e) => setBedrooms(Number(e.target.value || 0))} 
-                  className="border-amber-200 focus:border-amber-400 h-12 text-lg font-semibold"
+                  className="border-gray-200 focus:border-gray-400 h-10 text-lg font-semibold"
                 />
               </div>
 
@@ -134,7 +130,7 @@ export default function QuickCalculator() {
                   min={0} 
                   value={bathrooms} 
                   onChange={(e) => setBathrooms(Number(e.target.value || 0))} 
-                  className="border-amber-200 focus:border-amber-400 h-12 text-lg font-semibold"
+                  className="border-gray-200 focus:border-gray-400 h-10 text-lg font-semibold"
                 />
               </div>
 
@@ -145,34 +141,34 @@ export default function QuickCalculator() {
                   min={0} 
                   value={wardrobes} 
                   onChange={(e) => setWardrobes(Number(e.target.value || 0))} 
-                  className="border-amber-200 focus:border-amber-400 h-12 text-lg font-semibold"
+                  className="border-gray-200 focus:border-gray-400 h-10 text-lg font-semibold"
                 />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-amber-100">
+          <div className="bg-white rounded-2xl p-4 shadow-md border border-gray-200">
             <h4 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
               ✨ Premium Add-ons
             </h4>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="flex items-center gap-3 p-3 rounded-xl border border-amber-100 hover:bg-amber-50 transition-colors cursor-pointer">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer">
                 <Checkbox checked={modularKitchen} onCheckedChange={setModularKitchen} className="w-5 h-5" />
                 <span className="font-medium text-slate-700">🍳 Modular Kitchen</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-xl border border-amber-100 hover:bg-amber-50 transition-colors cursor-pointer">
+              <label className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer">
                 <Checkbox checked={falseCeiling} onCheckedChange={setFalseCeiling} className="w-5 h-5" />
                 <span className="font-medium text-slate-700">🏛️ False Ceiling</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-xl border border-amber-100 hover:bg-amber-50 transition-colors cursor-pointer">
+              <label className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer">
                 <Checkbox checked={painting} onCheckedChange={setPainting} className="w-5 h-5" />
                 <span className="font-medium text-slate-700">🎨 Premium Painting</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-xl border border-amber-100 hover:bg-amber-50 transition-colors cursor-pointer">
+              <label className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer">
                 <Checkbox checked={lighting} onCheckedChange={setLighting} className="w-5 h-5" />
                 <span className="font-medium text-slate-700">💡 Lighting Package</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-xl border border-amber-100 hover:bg-amber-50 transition-colors cursor-pointer col-span-2">
+              <label className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer col-span-2">
                 <Checkbox checked={smartHome} onCheckedChange={setSmartHome} className="w-5 h-5" />
                 <span className="font-medium text-slate-700">🏠 Smart Home Add-on</span>
               </label>
@@ -181,21 +177,21 @@ export default function QuickCalculator() {
         </div>
 
         {/* Right Column - Results */}
-        <div className="space-y-6">
-          <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-8 text-white shadow-xl">
+        <div className="space-y-4">
+          <div className="bg-slate-700 rounded-2xl p-6 text-white shadow-lg">
             <div className="text-center">
-              <p className="text-amber-100 text-lg mb-2">Estimated Total Cost</p>
-              <div className="text-5xl font-bold mb-4 animate-pulse">
+              <p className="text-gray-300 text-lg mb-2">Estimated Total Cost</p>
+              <div className="text-4xl font-bold mb-4">
                 ₹{Math.round(price).toLocaleString("en-IN")}
               </div>
-              <p className="text-amber-200 text-sm">*Inclusive of materials and labor</p>
-              <p className="text-amber-200 text-xs mt-1">Taxes and site variations may apply</p>
+              <p className="text-gray-300 text-sm">*Inclusive of materials and labor</p>
+              <p className="text-gray-300 text-xs mt-1">Taxes and site variations may apply</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-amber-100">
+          <div className="bg-white rounded-2xl p-4 shadow-md border border-gray-200">
             <h4 className="text-lg font-semibold text-slate-800 mb-4">📊 Cost Breakdown</h4>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-2 text-sm">
               <div className="flex justify-between items-center py-2 border-b border-gray-100">
                 <span className="text-slate-600">Base Construction</span>
                 <span className="font-semibold">₹{Math.round((rateByFinish[finish] || 2000) * Number(area) * (propertyType === "villa" ? 1.2 : 1)).toLocaleString("en-IN")}</span>
@@ -247,7 +243,7 @@ export default function QuickCalculator() {
 
           <Button 
             onClick={addPackageToCart} 
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 text-lg rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-200"
+            className="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 text-lg rounded-2xl transition-all duration-200"
           >
             🛒 Add to Cart & Continue
           </Button>

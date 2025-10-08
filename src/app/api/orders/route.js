@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth-middleware';
-import { sendEmail, emailTemplates } from '@/lib/email';
+import { sendEmail, sendEmailToMultiple, emailTemplates, getAdminEmails } from '@/lib/email';
 import { getProductById } from '@/data/products';
 
 async function createOrderHandler(request) {
@@ -73,28 +73,55 @@ async function createOrderHandler(request) {
       totalAmount,
       items: validatedItems,
       shippingAddress: typeof shippingAddress === 'object' 
-        ? `${shippingAddress.street}, ${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.zipCode}, ${shippingAddress.country}`
+        ? `${shippingAddress.fullName}\n${shippingAddress.addressLine1}${shippingAddress.addressLine2 ? '\n' + shippingAddress.addressLine2 : ''}\n${shippingAddress.city}, ${shippingAddress.state} - ${shippingAddress.pincode}`
         : shippingAddress,
       billingAddress: billingAddress 
         ? (typeof billingAddress === 'object' 
-          ? `${billingAddress.street}, ${billingAddress.city}, ${billingAddress.state} ${billingAddress.zipCode}, ${billingAddress.country}`
+          ? `${billingAddress.fullName}\n${billingAddress.addressLine1}${billingAddress.addressLine2 ? '\n' + billingAddress.addressLine2 : ''}\n${billingAddress.city}, ${billingAddress.state} - ${billingAddress.pincode}`
           : billingAddress)
         : 'Same as shipping address',
       notes: notes || 'No additional notes'
     };
 
-    // Send order confirmation email to admin
-    const template = emailTemplates.orderConfirmation(orderData);
-    const emailResult = await sendEmail({
-      to: process.env.ADMIN_EMAIL,
-      subject: template.subject,
-      html: template.html,
-      text: template.text
+    // Send order confirmation email to customer
+    const customerTemplate = emailTemplates.customerOrderConfirmation(orderData);
+    const customerEmailResult = await sendEmail({
+      to: user.email,
+      subject: customerTemplate.subject,
+      html: customerTemplate.html,
+      text: customerTemplate.text
     });
 
-    if (!emailResult.success) {
-      console.error('Failed to send order email:', emailResult.error);
+    if (!customerEmailResult.success) {
+      console.error('Failed to send customer confirmation email:', customerEmailResult.error);
       // Don't fail the order creation if email fails
+    } else {
+      console.log('Customer confirmation email sent successfully');
+    }
+
+    // Send order notification email to multiple admins
+    const adminEmails = getAdminEmails();
+    if (adminEmails.length > 0) {
+      const adminTemplate = emailTemplates.orderConfirmation(orderData);
+      const adminEmailResults = await sendEmailToMultiple({
+        recipients: adminEmails,
+        subject: adminTemplate.subject,
+        html: adminTemplate.html,
+        text: adminTemplate.text
+      });
+
+      console.log('Admin email results:', adminEmailResults);
+      
+      // Log any failed admin emails
+      adminEmailResults.forEach(result => {
+        if (!result.success) {
+          console.error(`Failed to send admin email to ${result.recipient}:`, result.error);
+        } else {
+          console.log(`Admin notification email sent successfully to ${result.recipient}`);
+        }
+      });
+    } else {
+      console.warn('No admin emails configured');
     }
 
     // Clear user's cart after successful order

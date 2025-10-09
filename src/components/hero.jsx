@@ -33,9 +33,9 @@ export default function Hero() {
         <div className="absolute inset-0 bg-black/35" aria-hidden="true" />
         <div className="relative z-10 h-full container mx-auto px-4 flex items-center">
           <div className="max-w-2xl text-white">
-            <h1 className="text-3xl md:text-5xl font-semibold text-balance">Crafting Homes, One Detail at a Time</h1>
+            <h1 className="text-3xl md:text-5xl font-semibold text-balance">Building Homes, One Detail at a Time !</h1>
             <p className="mt-3 md:mt-4 text-white/90">
-              Premium furniture and interior design tailored to your lifestyle.
+              Civil precision, curated interiors, landscaped living, smart technology, and exquisite furniture - all thoughtfully designed around you.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="/estimate">

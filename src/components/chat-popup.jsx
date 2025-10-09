@@ -17,11 +17,11 @@ export default function ChatPopup() {
   }, [])
 
   const handleCall = () => {
-    window.location.href = "tel:+919876543210"
+    window.location.href = "tel:+919583530095"
   }
 
   const handleWhatsApp = () => {
-    window.open("https://wa.me/919876543210", "_blank")
+    window.open("https://wa.me/919583530095", "_blank")
   }
 
   const handleClose = () => {
@@ -35,7 +35,7 @@ export default function ChatPopup() {
   if (!isVisible) return null
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 animate-slide-in-right">
+    <div className="fixed bottom-4 right-4 z-[9999] animate-slide-in-right">
       <div className={`bg-white rounded-2xl shadow-2xl border border-gray-200 transition-all duration-300 ${
         isMinimized ? 'w-16 h-16' : 'w-80 max-w-[90vw]'
       }`}>
@@ -93,7 +93,7 @@ export default function ChatPopup() {
                 </p>
                 <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span>+91 98765 43210</span>
+                  <span>+91 95835 30095</span>
                 </div>
               </div>
 

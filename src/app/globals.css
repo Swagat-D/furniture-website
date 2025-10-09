@@ -317,3 +317,37 @@
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: #6b7280;
 }
+
+/* Mobile Menu Button Enhancement */
+@media (max-width: 1024px) {
+  .mobile-menu-btn {
+    position: relative;
+    z-index: 60;
+    min-width: 44px;
+    min-height: 44px;
+    background: rgba(51, 65, 85, 0.9) !important;
+    border: 2px solid #fbbf24 !important;
+    color: #fbbf24 !important;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(251, 191, 36, 0.2) !important;
+  }
+  
+  .mobile-menu-btn:hover {
+    background: #fbbf24 !important;
+    color: #1e293b !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(251, 191, 36, 0.3) !important;
+    transform: translateY(-1px);
+  }
+  
+  .mobile-menu-btn:active {
+    transform: translateY(0);
+  }
+}
+
+/* Header responsiveness */
+@media (max-width: 640px) {
+  .site-header-container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}

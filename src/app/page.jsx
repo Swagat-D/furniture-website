@@ -8,6 +8,7 @@ import ContactSection from "@/components/contact-section"
 import { CtaBanner } from "@/components/cta-banner"
 import { WhyChooseUs } from "@/components/why-choose-us"
 import ChatPopup from "@/components/chat-popup"
+import FloatingActionButtons from "@/components/floating-action-buttons"
 
 export default function HomePage() {
   return (
@@ -61,6 +62,9 @@ export default function HomePage() {
 
       {/* Chat Popup */}
       <ChatPopup />
+
+      {/* Floating Action Buttons */}
+      <FloatingActionButtons />
     </>
   )
 }

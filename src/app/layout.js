@@ -12,6 +12,7 @@ export const metadata = {
   title: "Archik Constructions",
   description: "Furniture and interior solutions.",
   generator: "v0.app",
+  viewport: "width=device-width, initial-scale=1",
 }
 
 export default function RootLayout({ children }) {

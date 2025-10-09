@@ -170,8 +170,8 @@ This email was generated from the Archik Constructions website contact form.
             <h3 style="color: #92400e; margin: 0 0 10px 0;">Need Immediate Assistance?</h3>
             <p style="color: #92400e; margin: 0 0 15px 0;">For urgent inquiries, feel free to contact us directly:</p>
             <div style="display: inline-flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-              <a href="tel:+919876543210" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 600;">📞 Call Now</a>
-              <a href="https://wa.me/919876543210" style="background: #10b981; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 600;">💬 WhatsApp</a>
+              <a href="tel:+919583530095" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 600;">📞 Call Now</a>
+              <a href="https://wa.me/919583530095" style="background: #10b981; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 600;">💬 WhatsApp</a>
             </div>
           </div>
         </div>
@@ -202,8 +202,8 @@ What happens next?
 Need Immediate Assistance?
 ━━━━━━━━━━━━━━━━━━━━
 For urgent inquiries, contact us directly:
-• Phone: +91 98765 43210
-• WhatsApp: +91 98765 43210
+• Phone: +91 9583530095
+• WhatsApp: +91 9583530095
 
 Thank you for choosing Archik Constructions for your furniture and interior design needs!
 
@@ -369,7 +369,7 @@ Please process this order as soon as possible.
         </div>
         
         <div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">
-          <p>Need help? Contact us at <a href="mailto:${process.env.SMTP_USER}" style="color: #3b82f6;">${process.env.SMTP_USER}</a> or call us at +91 98765 43210</p>
+          <p>Need help? Contact us at <a href="mailto:${process.env.SMTP_USER}" style="color: #3b82f6;">${process.env.SMTP_USER}</a> or call us at +91 95835 30095</p>
           <p>© 2025 Archik Constructions. All rights reserved.</p>
         </div>
       </div>
@@ -399,7 +399,7 @@ What happens next?
 • Estimated Delivery: 5-7 business days
 • 24/7 Customer Support Available
 
-Need help? Contact us at ${process.env.SMTP_USER} or call +91 98765 43210
+Need help? Contact us at ${process.env.SMTP_USER} or call +91 95835 30095
 
 © 2025 Archik Constructions. All rights reserved.
     `

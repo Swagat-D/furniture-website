@@ -117,7 +117,7 @@ export default function ContactSection() {
               <Input 
                 required
                 type="tel" 
-                placeholder="+91 98765 43210" 
+                placeholder="+91 95835 30095" 
                 value={formData.phone}
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
                 className="border-gray-200 focus:border-gray-400 py-2"
@@ -204,8 +204,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-slate-800">Email Us</h4>
-                  <p className="text-slate-600">hello@archik-construction.com</p>
-                  <p className="text-slate-600">support@archik-construction.com</p>
+                  <p className="text-slate-600">info@archikconstruction.com</p>
                 </div>
               </div>
               
@@ -217,7 +216,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-slate-800">Call Us</h4>
-                  <p className="text-slate-600">+91 98765 43210</p>
+                  <p className="text-slate-600">+91 95835 30095</p>
                   <p className="text-slate-500 text-sm">Mon - Sat: 9 AM - 7 PM</p>
                 </div>
               </div>

@@ -189,32 +189,32 @@ export function SiteHeader() {
   const NavLinks = () => (
     <ul className="flex flex-col lg:flex-row gap-4 lg:gap-6 xl:gap-8 text-sm lg:text-[14px] xl:text-[15px]">
       <li>
-        <Link href="/" className="hover:text-amber-300 transition-colors">
+        <Link href="/" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
           Home
         </Link>
       </li>
       <li>
-        <a href="#story" className="hover:text-amber-300 transition-colors">
+        <a href="#story" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
           Our Story
         </a>
       </li>
       <li>
-        <a href="#timeline" className="hover:text-amber-300 transition-colors">
+        <a href="#timeline" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
           Timeline
         </a>
       </li>
       <li>
-        <a href="#products" className="hover:text-amber-300 transition-colors">
+        <a href="#products" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
           Products
         </a>
       </li>
       <li>
-        <a href="#services" className="hover:text-amber-300 transition-colors">
+        <a href="#services" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
           Services
         </a>
       </li>
       <li>
-        <a href="#contact" className="hover:text-amber-300 transition-colors">
+        <a href="#contact" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
           Contact
         </a>
       </li>
@@ -223,7 +223,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b bg-slate-800 backdrop-blur text-white">
-      <div className="container mx-auto px-3 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center justify-between max-w-full">
+      <div className="site-header-container container mx-auto px-3 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center justify-between max-w-full">
         <Link href="/" className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 min-w-0">
           <img src="/placeholder-logo.png" alt="Archik Constructions logo" className="h-6 w-6 sm:h-7 sm:w-7 flex-shrink-0" />
           <span className="font-semibold tracking-wide text-white text-sm sm:text-base truncate">
@@ -236,13 +236,89 @@ export function SiteHeader() {
           <NavLinks />
         </nav>
 
-        <div className="flex items-center gap-1 sm:gap-2 lg:gap-2 xl:gap-3 flex-shrink-0">
+        <div className="flex items-center justify-end gap-2 sm:gap-2 lg:gap-2 xl:gap-3 flex-shrink-0 relative z-50">
+          {/* Mobile Menu Button - First item for maximum visibility */}
+          <div className="lg:hidden block relative z-[100]">
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  aria-label="Open navigation menu" 
+                  className="mobile-menu-btn border-2 border-amber-300 text-amber-300 hover:bg-amber-300 hover:text-slate-800 bg-slate-800 transition-all duration-200 p-2 h-11 w-11 flex items-center justify-center shadow-lg hover:shadow-xl ring-1 ring-amber-300/20"
+                >
+                  <span className="sr-only">Open menu</span>
+                  {/* Three horizontal lines icon - hamburger menu */}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-current" role="img" aria-label="Menu">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                  </svg>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[350px] p-6">
+                <div className="mt-6 space-y-6">
+                  <div className="flex items-center gap-3 pb-4 border-b">
+                    <img src="/placeholder-logo.png" alt="Archik Constructions logo" className="h-8 w-8" />
+                    <span className="font-semibold text-lg">Archik Constructions</span>
+                  </div>
+                  
+                  {/* Navigation Links */}
+                  <div className="space-y-1">
+                    <h3 className="font-medium text-gray-900 mb-3">Navigation</h3>
+                    <NavLinks />
+                  </div>
+                  
+                  {/* Quick Actions */}
+                  <div className="pt-4 border-t space-y-3">
+                    <h3 className="font-medium text-gray-900 mb-3">Quick Actions</h3>
+                    
+                    <Button 
+                      onClick={() => {setSearchOpen(true); setOpen(false)}}
+                      variant="outline"
+                      className="w-full px-4 py-3 rounded font-medium transition-colors"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      Search Products
+                    </Button>
+                    
+                    {user ? (
+                      <Button 
+                        onClick={() => {logout(); setOpen(false)}}
+                        variant="outline"
+                        className="w-full px-4 py-3 rounded font-medium transition-colors"
+                      >
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1" />
+                        </svg>
+                        Logout ({user.name || user.email.split('@')[0]})
+                      </Button>
+                    ) : (
+                      <Button 
+                        onClick={() => {setAuthModalOpen(true); setOpen(false)}}
+                        variant="outline"
+                        className="w-full px-4 py-3 rounded font-medium transition-colors"
+                      >
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Login / Sign Up
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+
           {/* Search Button */}
           <Button 
             onClick={() => setSearchOpen(true)}
             variant="outline" 
             size="sm"
-            className="border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm"
+            className="hidden sm:flex border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm"
           >
             <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -254,7 +330,7 @@ export function SiteHeader() {
           {user ? (
             <>
               {/* Desktop User Info */}
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden lg:flex items-center gap-2">
                 <span className="text-sm text-white truncate max-w-[100px] lg:max-w-[120px]">Hi, {user.name || user.email}</span>
                 <Button 
                   onClick={logout}
@@ -268,12 +344,12 @@ export function SiteHeader() {
                   <span className="hidden lg:inline xl:inline">Logout</span>
                 </Button>
               </div>
-              {/* Mobile Logout Button */}
+              {/* Mobile/Tablet Logout Button */}
               <Button 
                 onClick={logout}
                 variant="outline" 
                 size="sm"
-                className="md:hidden border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors"
+                className="lg:hidden border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors"
               >
                 <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1" />
@@ -283,7 +359,7 @@ export function SiteHeader() {
           ) : (
             <Button 
               onClick={() => setAuthModalOpen(true)}
-              className="hidden sm:flex bg-slate-700 hover:bg-slate-600 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors"
+              className="hidden lg:flex bg-slate-700 hover:bg-slate-600 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors"
             >
               <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -298,73 +374,18 @@ export function SiteHeader() {
             onClick={() => setCartPanelOpen(true)}
             variant="outline" 
             size="sm"
-            className="border-white text-white hover:bg-white hover:text-slate-800 relative bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm"
+            className="border-white text-white hover:bg-white hover:text-slate-800 relative bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm flex-shrink-0"
           >
-            <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-0 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 mr-0 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 8m1.5-8h10m0 0v8a2 2 0 01-2 2H9a2 2 0 01-2-2v-8m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
             </svg>
-            <span className="hidden lg:inline xl:inline">Cart</span>
+            <span className="hidden sm:inline">Cart</span>
             {items.length > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center animate-pulse">
                 {items.reduce((n, i) => n + i.qty, 0)}
               </span>
             )}
           </Button>
-
-          {/* mobile menu */}
-          <div className="lg:hidden">
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon" aria-label="Open menu" className="border-white text-white hover:bg-white hover:text-slate-800 transition-colors p-1.5 sm:p-2 h-8 w-8 sm:h-10 sm:w-10">
-                  <span className="sr-only">Open menu</span>
-                  <svg width="16" height="16" className="sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] sm:w-[320px] p-4 sm:p-6">
-                <div className="mt-6 space-y-6">
-                  <div className="flex items-center gap-2 pb-4 border-b">
-                    <img src="/placeholder-logo.png" alt="Archik Constructions logo" className="h-8 w-8" />
-                    <span className="font-semibold text-lg">Archik Constructions</span>
-                  </div>
-                  <NavLinks />
-                  <div className="pt-4 border-t space-y-3">
-                    {!user && (
-                      <Button 
-                        onClick={() => {setAuthModalOpen(true); setOpen(false)}}
-                        className="w-full bg-slate-700 hover:bg-slate-600 text-white px-4 py-3 rounded font-medium transition-colors"
-                      >
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        Login / Sign up
-                      </Button>
-                    )}
-                    <Button 
-                      onClick={() => {setCartPanelOpen(true); setOpen(false)}}
-                      variant="outline"
-                      className="w-full px-4 py-3 rounded font-medium transition-colors relative"
-                    >
-                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 8m1.5-8h10m0 0v8a2 2 0 01-2 2H9a2 2 0 01-2-2v-8m8 0V9a2 2 0 00-2 2H9a2 2 0 00-2 2v4.01" />
-                      </svg>
-                      Cart {items.length > 0 && `(${items.reduce((n, i) => n + i.qty, 0)})`}
-                    </Button>
-                    {user && (
-                      <Button 
-                        onClick={() => {logout(); setOpen(false)}}
-                        variant="outline"
-                        className="w-full px-4 py-3 rounded font-medium text-black transition-colors border-gray-300 hover:bg-gray-50"
-                      >
-                        Logout
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
         </div>
       </div>
 

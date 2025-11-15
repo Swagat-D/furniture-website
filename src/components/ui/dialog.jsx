@@ -58,21 +58,26 @@ export function DialogTrigger({ asChild, children, ...props }) {
   });
 }
 
-export function DialogContent({ className = "", children }) {
+export function DialogContent({ className = "", children, style = {} }) {
+  const defaultStyle = {
+    width: '100%',
+    maxWidth: '28rem',
+    maxHeight: '90vh',
+    overflowY: 'auto',
+    position: 'relative',
+    margin: 'auto',
+    transform: 'translateY(0)',
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+    animation: 'fadeInScale 0.2s ease-out'
+  };
+
+  // Merge custom styles with defaults, allowing overrides
+  const mergedStyle = { ...defaultStyle, ...style };
+
   return (
     <div 
       className={`bg-white shadow-2xl border border-gray-100 p-6 sm:p-8 rounded-xl ${className}`}
-      style={{ 
-        width: '100%',
-        maxWidth: '28rem',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-        position: 'relative',
-        margin: 'auto',
-        transform: 'translateY(0)',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-        animation: 'fadeInScale 0.2s ease-out'
-      }}
+      style={mergedStyle}
     >
       {children}
     </div>

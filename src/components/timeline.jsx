@@ -1,23 +1,33 @@
 const items = [
   {
-    year: "2014",
-    title: "Conceptualized",
-    desc: "Archik was envisioned to blend modern architecture with sustainability.",
+    year: "2012",
+    title: "Archik Founded",
+    desc: "Began with premium government civil construction projects, quickly gaining recognition for quality, reliability, and trustworthiness.",
   },
   {
-    year: "2018",
-    title: "First Workshop",
-    desc: "Our boutique workshop launched, focusing on handcrafted wooden pieces.",
+    year: "2015",
+    title: "Expansion into Private Sector",
+    desc: "Expanded into private residential and commercial projects. Added interior design services, blending civil expertise with design innovation while maintaining affordability and quality.",
+  },
+  {
+    year: "2017",
+    title: "Smart Home Integration",
+    desc: "Executed first smart home integration project and launched turnkey solutions. Solidified reputation for delivering premium, functional, and elegant spaces across sectors.",
+  },
+  {
+    year: "2019",
+    title: "Archik Homes Launched",
+    desc: "Launched Archik Homes with own furniture manufacturing unit, offering Pattachitra art, custom furniture, and premium home décor, providing clients complete lifestyle solutions under one roof.",
   },
   {
     year: "2022",
-    title: "Expansion",
-    desc: "Scaled into full residential and commercial projects, elevating innovation.",
+    title: "Hospitality & Institutional Projects",
+    desc: "Expanded into hospitality and institutional projects. Enhanced premium offerings including custom furniture, landscaped gardens, and smart home automation, while keeping services accessible and client-centric.",
   },
   {
-    year: "2024",
-    title: "Founded Officially",
-    desc: "Trust, credibility, and sustainable sourcing became our foundation.",
+    year: "2025",
+    title: "Most Trusted Full-Service Brand",
+    desc: "Archik Construction & Homes becomes a most trusted, full-service brand, delivering civil construction, interiors, furniture, smart homes, landscaping, and turnkey solutions, recognized for premium quality, sustainability, and affordability.",
   },
 ]
 
@@ -34,7 +44,7 @@ export default function Timeline() {
         {items.map((it, i) => {
           const left = i % 2 === 0
           return (
-            <li key={it.year} className="relative grid items-start gap-6 md:grid-cols-2 md:gap-10 opacity-0 animate-fadeInUp" style={{animationDelay: `${i * 0.2}s`, animationFillMode: 'forwards'}}>
+            <li key={it.year} className={`relative grid items-start gap-6 md:grid-cols-2 md:gap-10 opacity-0 ${left ? 'animate-slideInLeft' : 'animate-slideInRight'}`} style={{animationDelay: `${i * 0.3}s`, animationFillMode: 'forwards'}}>
               {/* side A */}
               <div
                 className={`${left ? "order-1 md:order-1" : "order-1 md:order-2"} ${left ? "md:pr-10" : "md:pl-10"}`}

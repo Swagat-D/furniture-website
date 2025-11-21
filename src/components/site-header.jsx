@@ -12,7 +12,7 @@ import { useAuth } from "@/components/auth-context"
 import { hardcodedProducts } from "@/data/products"
 
 export function SiteHeader() {
-  const [open, setOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [cartPanelOpen, setCartPanelOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -186,206 +186,238 @@ export function SiteHeader() {
     handleSearch(value)
   }
 
-  const NavLinks = () => (
-    <ul className="flex flex-col lg:flex-row gap-4 lg:gap-6 xl:gap-8 text-sm lg:text-[14px] xl:text-[15px]">
-      <li>
-        <Link href="/" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
-          Home
-        </Link>
-      </li>
-      <li>
-        <a href="#story" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
-          Our Story
-        </a>
-      </li>
-      <li>
-        <a href="#timeline" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
-          Timeline
-        </a>
-      </li>
-      <li>
-        <a href="#products" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
-          Products
-        </a>
-      </li>
-      <li>
-        <a href="#services" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
-          Services
-        </a>
-      </li>
-      <li>
-        <a href="#contact" className="hover:text-amber-300 transition-colors" onClick={() => setOpen(false)}>
-          Contact
-        </a>
-      </li>
-    </ul>
-  )
-
   return (
     <header className="sticky top-0 z-50 border-b bg-slate-800 backdrop-blur text-white">
-      <div className="site-header-container container mx-auto px-3 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center justify-between max-w-full">
-        <Link href="/" className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 min-w-0">
-          <img src="/placeholder-logo.png" alt="Archik Constructions logo" className="h-6 w-6 sm:h-7 sm:w-7 flex-shrink-0" />
-          <span className="font-semibold tracking-wide text-white text-sm sm:text-base truncate">
-            <span className="hidden lg:inline xl:inline">Archik Constructions</span>
-            <span className="lg:hidden xl:hidden">Archik</span>
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between relative">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+          <img src="/placeholder-logo.png" alt="Archik Constructions logo" className="h-8 w-8" />
+          <span className="font-semibold text-white text-lg">
+            <span className="hidden lg:inline">Archik Constructions</span>
+            <span className="lg:hidden">Archik</span>
           </span>
         </Link>
 
-        <nav className="hidden lg:block flex-shrink-0">
-          <NavLinks />
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:block">
+          <ul className="flex flex-row gap-6 xl:gap-8 text-sm lg:text-[14px] xl:text-[15px]">
+            <li>
+              <Link href="/" className="hover:text-amber-300 transition-colors">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link href="/our-story" className="hover:text-amber-300 transition-colors">
+                Our Story
+              </Link>
+            </li>
+            <li>
+              <Link href="/timeline" className="hover:text-amber-300 transition-colors">
+                Timeline
+              </Link>
+            </li>
+            <li>
+              <Link href="/products" className="hover:text-amber-300 transition-colors">
+                Products
+              </Link>
+            </li>
+            <li>
+              <Link href="/services" className="hover:text-amber-300 transition-colors">
+                Services
+              </Link>
+            </li>
+            <li>
+              <Link href="/archik-homes" className="hover:text-amber-300 transition-colors">
+                Archik Homes
+              </Link>
+            </li>
+            <li>
+              <Link href="/contact" className="hover:text-amber-300 transition-colors">
+                Contact
+              </Link>
+            </li>
+          </ul>
         </nav>
 
-        <div className="flex items-center justify-end gap-2 sm:gap-2 lg:gap-2 xl:gap-3 flex-shrink-0 relative z-50">
-          {/* Mobile Menu Button - First item for maximum visibility */}
-          <div className="lg:hidden block relative z-[100]">
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  aria-label="Open navigation menu" 
-                  className="mobile-menu-btn border-2 border-amber-300 text-amber-300 hover:bg-amber-300 hover:text-slate-800 bg-slate-800 transition-all duration-200 p-2 h-11 w-11 flex items-center justify-center shadow-lg hover:shadow-xl ring-1 ring-amber-300/20"
-                >
-                  <span className="sr-only">Open menu</span>
-                  {/* Three horizontal lines icon - hamburger menu */}
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-current" role="img" aria-label="Menu">
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                  </svg>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[350px] p-6">
-                <div className="mt-6 space-y-6">
-                  <div className="flex items-center gap-3 pb-4 border-b">
-                    <img src="/placeholder-logo.png" alt="Archik Constructions logo" className="h-8 w-8" />
-                    <span className="font-semibold text-lg">Archik Constructions</span>
-                  </div>
-                  
-                  {/* Navigation Links */}
-                  <div className="space-y-1">
-                    <h3 className="font-medium text-gray-900 mb-3">Navigation</h3>
-                    <NavLinks />
-                  </div>
-                  
-                  {/* Quick Actions */}
-                  <div className="pt-4 border-t space-y-3">
-                    <h3 className="font-medium text-gray-900 mb-3">Quick Actions</h3>
-                    
-                    <Button 
-                      onClick={() => {setSearchOpen(true); setOpen(false)}}
-                      variant="outline"
-                      className="w-full px-4 py-3 rounded font-medium transition-colors"
-                    >
-                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                      Search Products
-                    </Button>
-                    
-                    {user ? (
-                      <Button 
-                        onClick={() => {logout(); setOpen(false)}}
-                        variant="outline"
-                        className="w-full px-4 py-3 rounded font-medium transition-colors"
-                      >
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1" />
-                        </svg>
-                        Logout ({user.name || user.email.split('@')[0]})
-                      </Button>
-                    ) : (
-                      <Button 
-                        onClick={() => {setAuthModalOpen(true); setOpen(false)}}
-                        variant="outline"
-                        className="w-full px-4 py-3 rounded font-medium transition-colors"
-                      >
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        Login / Sign Up
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-
-          {/* Search Button */}
+        {/* Desktop Actions */}
+        <div className="hidden lg:flex items-center gap-4">
           <Button 
             onClick={() => setSearchOpen(true)}
             variant="outline" 
             size="sm"
-            className="hidden sm:flex border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm"
+            className="border-white text-white hover:bg-white hover:text-slate-800 bg-transparent"
           >
-            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <span className="hidden lg:inline xl:inline ml-1">Search</span>
+            Search
           </Button>
 
-          {/* Login Button or User Info */}
           {user ? (
-            <>
-              {/* Desktop User Info */}
-              <div className="hidden lg:flex items-center gap-2">
-                <span className="text-sm text-white truncate max-w-[100px] lg:max-w-[120px]">Hi, {user.name || user.email}</span>
-                <Button 
-                  onClick={logout}
-                  variant="outline" 
-                  size="sm"
-                  className="border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors"
-                >
-                  <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1" />
-                  </svg>
-                  <span className="hidden lg:inline xl:inline">Logout</span>
-                </Button>
-              </div>
-              {/* Mobile/Tablet Logout Button */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-white">Hi, {user.name || user.email}</span>
               <Button 
                 onClick={logout}
                 variant="outline" 
                 size="sm"
-                className="lg:hidden border-white text-white hover:bg-white hover:text-slate-800 bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors"
+                className="border-white text-white hover:bg-white hover:text-slate-800 bg-transparent"
               >
-                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1" />
-                </svg>
+                Logout
               </Button>
-            </>
+            </div>
           ) : (
             <Button 
               onClick={() => setAuthModalOpen(true)}
-              className="hidden lg:flex bg-slate-700 hover:bg-slate-600 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors"
+              className="bg-slate-700 hover:bg-slate-600 text-white"
             >
-              <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              <span className="hidden lg:inline xl:inline">Login / Sign up</span>
-              <span className="lg:hidden xl:hidden">Login</span>
+              Login / Sign up
             </Button>
           )}
 
-          {/* Cart Button with real item count */}
           <Button 
             onClick={() => setCartPanelOpen(true)}
             variant="outline" 
             size="sm"
-            className="border-white text-white hover:bg-white hover:text-slate-800 relative bg-transparent px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm flex-shrink-0"
+            className="border-white text-white hover:bg-white hover:text-slate-800 relative bg-transparent"
           >
-            <svg className="w-4 h-4 mr-0 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 8m1.5-8h10m0 0v8a2 2 0 01-2 2H9a2 2 0 01-2-2v-8m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
             </svg>
-            <span className="hidden sm:inline">Cart</span>
+            Cart
             {items.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center animate-pulse">
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
                 {items.reduce((n, i) => n + i.qty, 0)}
               </span>
             )}
           </Button>
+        </div>
+
+        {/* Mobile Menu - Clean Dropdown */}
+        <div className="lg:hidden relative">
+          <button 
+            type="button"
+            aria-label="Open navigation menu"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex items-center justify-center w-12 h-12 bg-transparent border-2 border-amber-300 rounded-lg text-amber-300 hover:bg-amber-300 hover:text-slate-800 transition-all duration-200"
+          >
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2.5" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              {mobileMenuOpen ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </>
+              )}
+            </svg>
+          </button>
+
+          {/* Dropdown Menu */}
+          {mobileMenuOpen && (
+            <>
+              {/* Backdrop */}
+              <div 
+                className="fixed inset-0 bg-black/20 z-40"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+              
+              {/* Dropdown Panel */}
+              <div className="absolute top-full right-0 mt-2 w-80 bg-slate-800 border border-slate-700 rounded-lg shadow-2xl z-50 overflow-hidden">
+                {/* Header */}
+                <div className="px-6 py-4 border-b border-slate-700">
+                  <div className="flex items-center gap-3">
+                    <img src="/placeholder-logo.png" alt="Archik Constructions logo" className="h-6 w-6" />
+                    <span className="font-semibold text-white">Archik Constructions</span>
+                  </div>
+                </div>
+                
+                {/* Navigation */}
+                <div className="p-4">
+                  <div className="space-y-1 mb-6">
+                    <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors">
+                      Home
+                    </Link>
+                    <Link href="/our-story" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors">
+                      Our Story
+                    </Link>
+                    <Link href="/timeline" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors">
+                      Timeline
+                    </Link>
+                    <Link href="/products" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors">
+                      Products
+                    </Link>
+                    <Link href="/services" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors">
+                      Services
+                    </Link>
+                    <Link href="/archik-homes" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors">
+                      Archik Homes
+                    </Link>
+                    <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors">
+                      Contact
+                    </Link>
+                  </div>
+                  
+                  {/* Divider */}
+                  <div className="border-t border-slate-700 mb-4"></div>
+                  
+                  {/* Actions */}
+                  <div className="space-y-2">
+                    <button 
+                      onClick={() => {setSearchOpen(true); setMobileMenuOpen(false)}}
+                      className="w-full flex items-center px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors text-left"
+                    >
+                      <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      Search Products
+                    </button>
+                    
+                    <button 
+                      onClick={() => {setCartPanelOpen(true); setMobileMenuOpen(false)}}
+                      className="w-full flex items-center px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors text-left"
+                    >
+                      <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 8m1.5-8h10m0 0v8a2 2 0 01-2 2H9a2 2 0 01-2-2v-8m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+                      </svg>
+                      Cart {items.length > 0 && <span className="ml-auto bg-amber-300 text-slate-800 text-xs px-2 py-0.5 rounded-full">{items.reduce((n, i) => n + i.qty, 0)}</span>}
+                    </button>
+                    
+                    {user ? (
+                      <button 
+                        onClick={() => {logout(); setMobileMenuOpen(false)}}
+                        className="w-full flex items-center px-4 py-2 text-white hover:text-amber-300 hover:bg-slate-700 rounded-md transition-colors text-left"
+                      >
+                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 713 3v1" />
+                        </svg>
+                        Logout ({user.name || user.email.split('@')[0]})
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={() => {setAuthModalOpen(true); setMobileMenuOpen(false)}}
+                        className="w-full mt-2 px-4 py-2 bg-amber-300 text-slate-800 hover:bg-amber-400 rounded-md transition-colors font-medium"
+                      >
+                        Login / Sign Up
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 

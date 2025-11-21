@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Eye, Star, ChevronRight, Users, Building, Factory, Wrench } from "lucide-react"
 
@@ -26,6 +26,7 @@ const services = [
     price: "Starting ₹2,50,000",
     description: "Comprehensive planning and feasibility solutions for your construction project",
     features: ["Site Analysis", "Feasibility Studies", "Budget Planning"],
+    link: "/services/pre-construction",
     subServices: [
       {
         category: "Site & Planning Support",
@@ -58,6 +59,7 @@ const services = [
     price: "Starting ₹5,00,000",
     description: "Creative and technical design solutions for modern living spaces",
     features: ["3D Rendering", "BIM Modeling", "Sustainable Design"],
+    link: "/services/design-architecture",
     subServices: [
       {
         category: "Architectural Design",
@@ -106,6 +108,7 @@ const services = [
     price: "Starting ₹15,00,000",
     description: "Core construction and site development services",
     features: ["RCC Work", "Steel Structure", "Site Development"],
+    link: "/services/civil-construction",
     subServices: [
       {
         category: "Core Construction",
@@ -140,6 +143,7 @@ const services = [
     price: "Starting ₹8,00,000",
     description: "Mechanical, Electrical & Plumbing solutions",
     features: ["Smart Systems", "Energy Efficient", "Safety Compliant"],
+    link: "/services/mep",
     subServices: [
       {
         category: "Electrical Works",
@@ -184,6 +188,7 @@ const services = [
     price: "Starting ₹1,50,000",
     description: "Comprehensive waterproofing and structural maintenance",
     features: ["Leak Protection", "Structural Repair", "Long-term Warranty"],
+    link: "/services/waterproofing",
     subServices: [
       {
         category: "Surface Waterproofing",
@@ -222,6 +227,7 @@ const services = [
     price: "Starting ₹12,00,000",
     description: "Eco-friendly and sustainable building solutions",
     features: ["Solar Integration", "Green Technology", "Energy Efficient"],
+    link: "/services/sustainable-construction",
     subServices: [
       {
         category: "Eco Installations",
@@ -261,6 +267,7 @@ const services = [
     price: "Starting ₹6,00,000",
     description: "Complete interior solutions and furnishing",
     features: ["Modular Design", "Custom Furniture", "Designer Lighting"],
+    link: "/services/interior-works",
     subServices: [
       {
         category: "Modular Installations", 
@@ -318,6 +325,7 @@ const services = [
     price: "Starting ₹10,00,000",
     description: "External construction and landscaping solutions",
     features: ["Paving Solutions", "Landscape Design", "Outdoor Lighting"],
+    link: "/services/outdoor-hardscaping",
     subServices: [
       {
         category: "Paving & Pathways",
@@ -349,6 +357,7 @@ const services = [
     price: "Starting ₹25,00,000",
     description: "Comprehensive project management and turnkey solutions",
     features: ["EPC Model", "Single Point Execution", "End-to-End Delivery"],
+    link: "/services/project-management",
     subServices: [
       {
         category: "Turnkey Contracting",
@@ -379,6 +388,7 @@ const services = [
     price: "Starting ₹3,00,000",
     description: "Ongoing maintenance and compliance services",
     features: ["AMC Services", "Safety Compliance", "Facility Management"],
+    link: "/services/post-construction",
     subServices: [
       {
         category: "Maintenance & Facility Management",
@@ -419,6 +429,7 @@ const services = [
     price: "Starting ₹2,00,000",
     description: "Safety protocols and regulatory compliance",
     features: ["Safety Audits", "PPE Compliance", "Legal Support"],
+    link: "/services/health-safety",
     subServices: [
       {
         category: "Site Safety",
@@ -448,6 +459,7 @@ const services = [
     price: "Starting ₹4,00,000",
     description: "Digital automation and smart technology integration",
     features: ["Home Automation", "Smart Security", "Energy Management"],
+    link: "/services/smart-solutions",
     subServices: [
       {
         category: "Home Automation",
@@ -486,6 +498,7 @@ const services = [
     price: "Starting ₹50,00,000",
     description: "Industry-specific construction solutions",
     features: ["Industrial Construction", "Institutional Projects", "Commercial Fit-Outs"],
+    link: "/services/specialized-construction",
     subServices: [
       {
         category: "Industrial Construction (Factories, Warehouses)",
@@ -518,16 +531,20 @@ const services = [
 
 export default function ServicesGrid() {
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [selectedService, setSelectedService] = useState(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const filteredServices = selectedCategory === 'all' 
     ? services 
     : services.filter(s => s.category === selectedCategory)
 
-  const openServiceModal = (service) => {
-    setSelectedService(service)
-    setIsModalOpen(true)
+  const getServiceLink = (service) => {
+    if (service.link) return service.link
+    
+    // Generate link from title if no explicit link
+    const slug = service.title.toLowerCase()
+      .replace(/[&()]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/,/g, '')
+    return `/services/${slug}`
   }
 
   const renderStars = (rating) => {
@@ -587,13 +604,12 @@ export default function ServicesGrid() {
                 className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500" 
               />
               
-              {/* Eye Button */}
-              <button
-                onClick={() => openServiceModal(service)}
-                className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-slate-100"
-              >
-                <Eye className="w-5 h-5 text-slate-600" />
-              </button>
+              {/* View Service Button */}
+              <Link href={getServiceLink(service)}>
+                <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-slate-100">
+                  <Eye className="w-5 h-5 text-slate-600" />
+                </button>
+              </Link>
 
               {/* Popular Badge */}
               {service.reviews > 150 && (
@@ -623,139 +639,18 @@ export default function ServicesGrid() {
                 ))}
               </div>
               
-              <Button
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 rounded-xl transition-all duration-200 flex items-center gap-2"
-                onClick={() => openServiceModal(service)}
-              >
-                <Eye className="w-4 h-4" />
-                View Details
-              </Button>
+              <Link href={getServiceLink(service)}>
+                <Button className="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 rounded-xl transition-all duration-200 flex items-center gap-2">
+                  <Eye className="w-4 h-4" />
+                  View Details
+                </Button>
+              </Link>
             </div>
           </Card>
         ))}
       </div>
 
-      {/* Service Detail Modal */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent 
-          className="p-0 gap-0" 
-          style={{
-            width: '70vw',
-            maxWidth: 'none',
-            height: '80vh',
-            maxHeight: '90vh',
-            overflowY: 'hidden'
-          }}
-        >
-          {selectedService && (
-            <div className="h-full flex flex-col">
-              {/* Simple Header */}
-              <div className="p-4 border-b bg-white">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <DialogTitle className="text-2xl font-bold text-gray-900">{selectedService.title}</DialogTitle>
-                    <div className="flex items-center gap-2 mt-1">
-                      {renderStars(selectedService.rating)}
-                      <span className="text-sm text-gray-600">({selectedService.reviews} reviews)</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-3xl font-bold text-blue-600">{selectedService.price}</div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Main Content */}
-              <div className="flex-1 overflow-y-auto p-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
-                  {/* Left: Service Image */}
-                  <div className="flex flex-col">
-                    <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                      <img 
-                        src={selectedService.image} 
-                        alt={selectedService.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* Right: Service Details */}
-                  <div className="flex flex-col space-y-6">
-                    {/* Features */}
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 text-gray-900">Service Features</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedService.features.map((feature, idx) => (
-                          <Badge key={idx} variant="secondary" className="bg-blue-100 text-blue-800">
-                            {feature}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* What's Included */}
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 text-gray-900">What's Included</h3>
-                      <ul className="space-y-2">
-                        {selectedService.included.map((item, idx) => (
-                          <li key={idx} className="flex items-center gap-2 text-sm text-gray-600">
-                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Description */}
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 text-gray-900">Service Description</h3>
-                      <p className="text-gray-700 leading-relaxed">{selectedService.description}</p>
-                    </div>
-
-                    {/* Sub Services */}
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 text-gray-900">Service Categories</h3>
-                      <div className="space-y-4">
-                        {selectedService.subServices.map((subService, idx) => (
-                          <div key={idx}>
-                            <h4 className="font-medium text-gray-800 mb-2">{subService.category}</h4>
-                            <div className="grid grid-cols-1 gap-2">
-                              {subService.items.slice(0, 4).map((item, itemIdx) => (
-                                <div key={itemIdx} className="flex items-center gap-2 text-sm text-gray-600">
-                                  <ChevronRight className="w-3 h-3 text-blue-500" />
-                                  <span>{item}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Footer Actions */}
-              <div className="border-t p-4 bg-white">
-                <div className="flex gap-3">
-                  <Button 
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3"
-                  >
-                    <Users className="w-4 h-4 mr-2" />
-                    Get Quote
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="px-6 border-blue-600 text-blue-600 hover:bg-blue-50"
-                  >
-                    Contact Us
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
         </div>
       </div>
     </div>

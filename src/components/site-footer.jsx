@@ -20,14 +20,12 @@ export function SiteFooter() {
   ]
 
   const deliveryCities = [
-    { name: "Mumbai" },
-    { name: "Delhi" },
-    { name: "Bangalore" },
-    { name: "Hyderabad" },
-    { name: "Chennai" },
-    { name: "Pune" },
+    { name: "Bhubaneswar" },
+    { name: "Cuttack" },
+    { name: "Puri" },
+    { name: "Khordha" },
     { name: "Kolkata" },
-    { name: "Ahmedabad" }
+    { name: "All Over Odisha" }
   ]
 
   const socialLinks = [

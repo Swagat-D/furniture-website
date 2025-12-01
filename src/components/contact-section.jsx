@@ -221,22 +221,54 @@ export default function ContactSection() {
                 </div>
               </div>
               
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-slate-800">Visit Our Showroom</h4>
-                  <p className="text-slate-600 font-medium">Mumbai Head Office</p>
-                  <p className="text-slate-600">Plot 123, Andheri East, Mumbai 400069</p>
-                  <button className="text-slate-600 hover:text-slate-800 text-sm font-medium mt-1 transition-colors">
-                    Get Directions →
-                  </button>
-                </div>
-              </div>
+              <div className="space-y-6">
+
+  {/* Address 1 */}
+  <div className="flex items-start gap-4">
+    <div className="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
+      <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    </div>
+
+    <div>
+      <h4 className="font-semibold text-slate-800">Visit Our Showroom</h4>
+      <p className="text-slate-600 font-medium">Bhubaneswar Office</p>
+      <p className="text-slate-600">
+        Plot no-B/32, Sidhivihar, New Jagamara Road,  
+        Infront of Pabitra Mandap, Bhubaneswar, Khurda, Odisha, 751030
+      </p>
+      <button className="text-slate-600 hover:text-slate-800 text-sm font-medium mt-1 transition-colors">
+        Get Directions →
+      </button>
+    </div>
+  </div>
+
+  {/* Address 2 */}
+  <div className="flex items-start gap-4">
+    <div className="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
+      <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    </div>
+
+    <div>
+      <h4 className="font-semibold text-slate-800">Visit Our Showroom</h4>
+      <p className="text-slate-600 font-medium">Bengaluru Office</p>
+      <p className="text-slate-600">
+        J304 Icon Happy Living, Electronic City Phase 2,  
+        Ecity, Bengaluru – 560100
+      </p>
+      <button className="text-slate-600 hover:text-slate-800 text-sm font-medium mt-1 transition-colors">
+        Get Directions →
+      </button>
+    </div>
+  </div>
+
+</div>
+
             </div>
           </div>
 
@@ -252,7 +284,7 @@ export default function ContactSection() {
             </div>
             <div className="relative h-64">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3769.8937831615896!2d72.86753351490171!3d19.11684998707467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9c676018b83%3A0x31db9cc0b5c4db8c!2sAndheri%20East%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1635000000000!5m2!1sen!2sin"
+                src="https://www.google.com/maps/place//@20.2609005,85.7958718,17z/data=!4m6!1m5!3m4!2zMjDCsDE1JzM5LjIiTiA4NcKwNDcnNTQuNCJF!8m2!3d20.2609005!4d85.7984467?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

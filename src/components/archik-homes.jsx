@@ -229,10 +229,10 @@ export default function ArchikHomes() {
                     <div className="p-5">
                       <h4 className="text-lg font-bold text-slate-900 mb-2">{product.name}</h4>
                       
-                      <div className="flex items-center gap-2 mb-3">
+                      {/* <div className="flex items-center gap-2 mb-3">
                         <span className="text-xl font-bold text-amber-600">{product.price}</span>
                         <span className="text-sm text-slate-500 line-through">{product.originalPrice}</span>
-                      </div>
+                      </div> */}
 
                       <div className="mb-4">
                         {product.features.slice(0, 2).map((feature, idx) => (
@@ -242,14 +242,14 @@ export default function ArchikHomes() {
                         ))}
                       </div>
                       
-                      <Button 
+                      {/* <Button 
                         size="sm"
                         className="w-full bg-amber-600 hover:bg-amber-700 text-white"
                         disabled={loadingStates[product.id]}
                         onClick={() => handleAddToCart(product)}
                       >
                         {loadingStates[product.id] ? 'Adding...' : 'Add to Cart'}
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                 ))}

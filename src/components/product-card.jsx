@@ -1,6 +1,11 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export function ProductCard({ product }) {
   return (
@@ -15,12 +20,12 @@ export function ProductCard({ product }) {
       <CardHeader className="pb-2">
         <CardTitle className="text-base md:text-lg">{product.name}</CardTitle>
       </CardHeader>
-      <CardContent className="pt-0 text-sm text-muted-foreground">{product.price}</CardContent>
-      <CardFooter className="pt-2">
+      {/* <CardContent className="pt-0 text-sm text-muted-foreground">{product.price}</CardContent> */}
+      {/* <CardFooter className="pt-2">
         <Button className="w-full">Add to cart</Button>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
-  )
+  );
 }
 
 // Consider removing once all imports are confirmed to use components/product-card.jsx

@@ -19,21 +19,21 @@ const slides = [
     alt: "Modern furniture and interior design",
     category: "Furniture & Interiors"
   },
-  {
-    src: "https://images.unsplash.com/photo-1558904541-efa843a96f01?w=1920&q=80",
-    alt: "Landscaping and outdoor living spaces",
-    category: "Landscaping"
-  },
+  // {
+  //   src: "https://images.unsplash.com/photo-1558904541-efa843a96f01?w=1920&q=80",
+  //   alt: "Landscaping and outdoor living spaces",
+  //   category: "Landscaping"
+  // },
   {
     src: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1920&q=80",
     alt: "Post-construction cleaning and finishing",
     category: "Post-Construction"
   },
-  {
-    src: "https://images.unsplash.com/photo-1558002038-1055907df827?w=1920&q=80",
-    alt: "Smart home automation and technology",
-    category: "Smart Technology"
-  },
+  // {
+  //   src: "https://images.unsplash.com/photo-1558002038-1055907df827?w=1920&q=80",
+  //   alt: "Smart home automation and technology",
+  //   category: "Smart Technology"
+  // },
 ]
 
 export default function Hero() {

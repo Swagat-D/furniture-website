@@ -403,7 +403,7 @@ export default function ContactSection() {
             </div>
             <div className="relative h-64">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m13!1m8!1m3!1d3742.9501882118398!2d85.7958718!3d20.2609005!3m2!1i1024!2i768!4f13.1!3m2!1m1!2s!5e0!3m2!1sen!2sin!4v1764671230290!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3742.9502007223405!2d85.79587337523589!3d20.26089998120317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjDCsDE1JzM5LjIiTiA4NcKwNDcnNTQuNCJF!5e0!3m2!1sen!2sin!4v1765693591994!5m2!1sen!2sin"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

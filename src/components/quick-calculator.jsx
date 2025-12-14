@@ -64,7 +64,7 @@ export default function QuickCalculator() {
   const [formData, setFormData] = useState({
     projectType: "",
     propertyType: "", 
-    area: 1000,
+    area: 10000,
     serviceType: "",
     finishQuality: "",
     addOns: {
@@ -121,36 +121,93 @@ export default function QuickCalculator() {
   }
 
   const calculateEstimate = useMemo(() => {
-    let basePrice = 0
-    let multiplier = 1
+    let baseRate = 0
+    let serviceMultiplier = 1
+    let finishMultiplier = 1
+    let timelineMultiplier = 1
 
-    // Service type base prices
-    if (formData.serviceType === "civil") basePrice = 1200 * formData.area
-    else if (formData.serviceType === "interior") basePrice = 800 * formData.area
-    else if (formData.serviceType === "mep") basePrice = 400 * formData.area
-    else if (formData.serviceType === "furniture") basePrice = 600 * formData.area
+    // Step 1: Get base rate from Project Type
+    const projectRates = {
+      "construction": 1800,
+      "interior": 2000,
+      "renovation": 1900
+    }
+    
+    // Step 2: Override with Property Type rate if available
+    const propertyRates = {
+      "1bhk": 1650,
+      "2bhk": 1750,
+      "3bhk": 1900,
+      "villa": 2200,
+      "duplex": 2000,
+      "commercial": 2000,
+      "office": 1850,
+      "retail": 1900
+    }
 
-    // Property type multiplier
-    if (formData.propertyType === "commercial") multiplier *= 1.3
-    else if (formData.propertyType === "industrial") multiplier *= 1.5
+    // Use property type rate if available, otherwise use project type rate
+    if (formData.propertyType && propertyRates[formData.propertyType]) {
+      baseRate = propertyRates[formData.propertyType]
+    } else if (formData.projectType && projectRates[formData.projectType]) {
+      baseRate = projectRates[formData.projectType]
+    }
 
-    // Finish quality multiplier
-    if (formData.finishQuality === "premium") multiplier *= 1.5
-    else if (formData.finishQuality === "luxury") multiplier *= 2.2
+    // Step 3: Apply Service Type multiplier
+    const serviceMultipliers = {
+      "shell_core": 0.8,
+      "design_only": 0.6,
+      "turnkey": 1,
+      "custom_furniture": 1 // Will add per sq.ft later
+    }
+    
+    if (formData.serviceType && serviceMultipliers[formData.serviceType] !== undefined) {
+      serviceMultiplier = serviceMultipliers[formData.serviceType]
+    }
 
-    // Add-ons
-    let addOnCost = 0
-    if (formData.addOns.smartHome) addOnCost += 150000
-    if (formData.addOns.landscaping) addOnCost += 80000
-    if (formData.addOns.solarPanel) addOnCost += 200000
-    if (formData.addOns.security) addOnCost += 75000
+    // Step 4: Apply Finish Quality multiplier
+    const finishMultipliers = {
+      "basic": 1,
+      "standard": 1.1,
+      "premium": 1.25,
+      "luxury": 1.4
+    }
+    
+    if (formData.finishQuality && finishMultipliers[formData.finishQuality]) {
+      finishMultiplier = finishMultipliers[formData.finishQuality]
+    }
 
-    const totalBase = basePrice * multiplier
-    const total = totalBase + addOnCost
+    // Step 5: Apply Timeline multiplier
+    const timelineMultipliers = {
+      "3_6_months": 1,
+      "1_3_months": 1.1,
+      "within_1_month": 1.15
+    }
+    
+    if (formData.timeline && timelineMultipliers[formData.timeline]) {
+      timelineMultiplier = timelineMultipliers[formData.timeline]
+    }
+
+    // Calculate base cost
+    let baseCost = baseRate * formData.area * serviceMultiplier * finishMultiplier * timelineMultiplier
+
+    // Add Custom Furniture cost if selected
+    if (formData.serviceType === "custom_furniture") {
+      baseCost += 500 * formData.area
+    }
+
+    // Step 6: Calculate Add-ons as percentage of base cost
+    let addOnPercentage = 0
+    if (formData.addOns.smartHome) addOnPercentage += 0.10 // 10%
+    if (formData.addOns.landscaping) addOnPercentage += 0.08 // 8%
+    if (formData.addOns.solarPanel) addOnPercentage += 0.06 // 6%
+    if (formData.addOns.security) addOnPercentage += 0.05 // 5%
+
+    const addOnCost = baseCost * addOnPercentage
+    const total = baseCost + addOnCost
     
     return {
-      min: Math.round(total * 0.85),
-      max: Math.round(total * 1.15)
+      min: Math.round(total * 0.90),
+      max: Math.round(total * 1.10)
     }
   }, [formData])
 
@@ -170,17 +227,24 @@ export default function QuickCalculator() {
               </div>
             </div>
             <div className="space-y-4">
-              {["New Construction", "Renovation", "Interior Only"].map((type) => (
+              {[
+                { label: "Construction", value: "construction", rate: "₹1,800/sq.ft" },
+                { label: "Interior Design", value: "interior", rate: "₹2,000/sq.ft" },
+                { label: "Renovation", value: "renovation", rate: "₹1,900/sq.ft" }
+              ].map((type) => (
                 <button
-                  key={type}
-                  onClick={() => handleProjectTypeSelect(type.toLowerCase().replace(" ", "_"))}
+                  key={type.value}
+                  onClick={() => handleProjectTypeSelect(type.value)}
                   className={`w-full p-4 rounded-xl border-2 text-left hover:shadow-md transition-all ${
-                    formData.projectType === type.toLowerCase().replace(" ", "_")
+                    formData.projectType === type.value
                       ? "border-slate-400 bg-slate-50 shadow-md"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
-                  <span className="font-medium">{type}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">{type.label}</span>
+                    <span className="text-sm text-slate-600 font-medium">{type.rate}</span>
+                  </div>
                 </button>
               ))}
             </div>
@@ -200,20 +264,28 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { type: "residential", label: "Residential" },
-                { type: "commercial", label: "Commercial" },
-                { type: "industrial", label: "Industrial" }
-              ].map(({ type, label }) => (
+                { label: "1 BHK", value: "1bhk", rate: "₹1,650/sq.ft" },
+                { label: "2 BHK", value: "2bhk", rate: "₹1,750/sq.ft" },
+                { label: "3 BHK", value: "3bhk", rate: "₹1,900/sq.ft" },
+                { label: "Villa", value: "villa", rate: "₹2,200/sq.ft" },
+                { label: "Duplex", value: "duplex", rate: "₹2,000/sq.ft" },
+                { label: "Commercial", value: "commercial", rate: "₹2,000/sq.ft" },
+                { label: "Office", value: "office", rate: "₹1,850/sq.ft" },
+                { label: "Retail", value: "retail", rate: "₹1,900/sq.ft" }
+              ].map(({ label, value, rate }) => (
                 <button
-                  key={type}
-                  onClick={() => handlePropertyTypeSelect(type)}
+                  key={value}
+                  onClick={() => handlePropertyTypeSelect(value)}
                   className={`w-full p-4 rounded-xl border-2 text-left hover:shadow-md transition-all ${
-                    formData.propertyType === type
+                    formData.propertyType === value
                       ? "border-slate-400 bg-slate-50 shadow-md"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
-                  <span className="font-medium">{label}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">{label}</span>
+                    <span className="text-sm text-slate-600 font-medium">{rate}</span>
+                  </div>
                 </button>
               ))}
             </div>
@@ -240,20 +312,20 @@ export default function QuickCalculator() {
                 <div className="relative">
                   <input
                     type="range"
-                    min={500}
-                    max={10000}
-                    step={100}
+                    min={10000}
+                    max={100000}
+                    step={1000}
                     value={formData.area}
                     onChange={(e) => setFormData({ ...formData, area: Number(e.target.value) })}
                     className="w-full h-2 rounded-lg appearance-none cursor-pointer slider"
                     style={{
-                      background: `linear-gradient(to right, #475569 0%, #475569 ${((formData.area - 500) / (10000 - 500)) * 100}%, #e5e7eb ${((formData.area - 500) / (10000 - 500)) * 100}%, #e5e7eb 100%)`
+                      background: `linear-gradient(to right, #475569 0%, #475569 ${((formData.area - 10000) / (100000 - 10000)) * 100}%, #e5e7eb ${((formData.area - 10000) / (100000 - 10000)) * 100}%, #e5e7eb 100%)`
                     }}
                   />
                 </div>
                 <div className="flex justify-between text-sm text-gray-500">
-                  <span>500 sq ft</span>
-                  <span>10,000 sq ft</span>
+                  <span>₹10,000</span>
+                  <span>₹1,00,000</span>
                 </div>
               </div>
             </div>
@@ -273,23 +345,23 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { type: "civil", label: "Civil Construction", price: "₹1,200/sq.ft" },
-                { type: "interior", label: "Interior Design", price: "₹800/sq.ft" },
-                { type: "mep", label: "MEP Services", price: "₹400/sq.ft" },
-                { type: "furniture", label: "Custom Furniture", price: "₹600/sq.ft" }
-              ].map(({ type, label, price }) => (
+                { value: "shell_core", label: "Shell & Core", desc: "Only structural (0.8x multiplier)" },
+                { value: "design_only", label: "Design Only", desc: "No execution (0.6x multiplier)" },
+                { value: "turnkey", label: "Turnkey", desc: "Complete end-to-end delivery (1x)" },
+                { value: "custom_furniture", label: "Custom Furniture", desc: "Add-on: ₹500/sq.ft" }
+              ].map(({ value, label, desc }) => (
                 <button
-                  key={type}
-                  onClick={() => handleServiceTypeSelect(type)}
+                  key={value}
+                  onClick={() => handleServiceTypeSelect(value)}
                   className={`w-full p-4 rounded-xl border-2 text-left hover:shadow-md transition-all ${
-                    formData.serviceType === type
+                    formData.serviceType === value
                       ? "border-slate-400 bg-slate-50 shadow-md"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">{label}</span>
-                    <span className="text-sm text-slate-600 font-medium">{price}</span>
+                  <div className="space-y-1">
+                    <span className="font-medium block">{label}</span>
+                    <span className="text-sm text-slate-600">{desc}</span>
                   </div>
                 </button>
               ))}
@@ -310,15 +382,16 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { type: "basic", label: "Basic", desc: "Standard materials and finishes" },
-                { type: "premium", label: "Premium", desc: "High-quality materials and finishes" },
-                { type: "luxury", label: "Luxury", desc: "Premium imported materials and luxury finishes" }
-              ].map(({ type, label, desc }) => (
+                { value: "basic", label: "Basic", desc: "Entry-level quality (1x multiplier)" },
+                { value: "standard", label: "Standard", desc: "Balanced materials & finish (1.1x)" },
+                { value: "premium", label: "Premium", desc: "High-end finish, luxury detailing (1.25x)" },
+                { value: "luxury", label: "Luxury", desc: "Ultra premium materials (1.4x)" }
+              ].map(({ value, label, desc }) => (
                 <button
-                  key={type}
-                  onClick={() => handleFinishQualitySelect(type)}
+                  key={value}
+                  onClick={() => handleFinishQualitySelect(value)}
                   className={`w-full p-4 rounded-xl border-2 text-left hover:shadow-md transition-all ${
-                    formData.finishQuality === type
+                    formData.finishQuality === value
                       ? "border-slate-400 bg-slate-50 shadow-md"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
@@ -346,11 +419,11 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { key: "smartHome", label: "Smart Home Integration", price: "₹1,50,000" },
-                { key: "landscaping", label: "Landscaping", price: "₹80,000" },
-                { key: "solarPanel", label: "Solar Panel Installation", price: "₹2,00,000" },
-                { key: "security", label: "Security System", price: "₹75,000" }
-              ].map(({ key, label, price }) => (
+                { key: "smartHome", label: "Smart Home Integration", percentage: "10% of total" },
+                { key: "landscaping", label: "Landscaping", percentage: "8% of total" },
+                { key: "solarPanel", label: "Solar Panel Installation", percentage: "6% of total" },
+                { key: "security", label: "Security System", percentage: "5% of total" }
+              ].map(({ key, label, percentage }) => (
                 <label
                   key={key}
                   className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer hover:shadow-md transition-all ${
@@ -364,7 +437,7 @@ export default function QuickCalculator() {
                     />
                     <span className="font-medium">{label}</span>
                   </div>
-                  <span className="text-sm font-medium text-slate-600">{price}</span>
+                  <span className="text-sm font-medium text-slate-600">{percentage}</span>
                 </label>
               ))}
             </div>
@@ -384,20 +457,23 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                "Within 1 month",
-                "1-3 months", 
-                "3-6 months"
-              ].map((timeline) => (
+                { value: "3_6_months", label: "3-6 months", desc: "Standard timeline (1x)" },
+                { value: "1_3_months", label: "1-3 months", desc: "Fast track (1.1x multiplier)" },
+                { value: "within_1_month", label: "Within 1 month", desc: "Very fast (1.15x multiplier)" }
+              ].map(({ value, label, desc }) => (
                 <button
-                  key={timeline}
-                  onClick={() => handleTimelineSelect(timeline)}
+                  key={value}
+                  onClick={() => handleTimelineSelect(value)}
                   className={`w-full p-4 rounded-xl border-2 text-left hover:shadow-md transition-all ${
-                    formData.timeline === timeline
+                    formData.timeline === value
                       ? "border-slate-400 bg-slate-50 shadow-md"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
-                  <span className="font-medium">{timeline}</span>
+                  <div className="space-y-1">
+                    <span className="font-medium block">{label}</span>
+                    <span className="text-sm text-slate-600">{desc}</span>
+                  </div>
                 </button>
               ))}
             </div>

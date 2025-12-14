@@ -19,7 +19,7 @@ const services = [
   {
     id: 1,
     title: "Pre-Construction Services",
-    image: "/warm-interior-story.jpg",
+    image: "/Pre-Construction Services.png",
     category: "residential",
     rating: 4.9,
     reviews: 156,
@@ -52,7 +52,7 @@ const services = [
   {
     id: 2,
     title: "Design & Architecture",
-    image: "/warm-interior-vision.jpg",
+    image: "/Design & Architecture.jpg",
     category: "residential", 
     rating: 4.8,
     reviews: 203,
@@ -101,7 +101,7 @@ const services = [
   {
     id: 3,
     title: "Civil Construction",
-    image: "/woodworker-workshop.png",
+    image: "/Civil Construction.png",
     category: "industrial",
     rating: 4.7,
     reviews: 89,
@@ -136,7 +136,7 @@ const services = [
   {
     id: 4,
     title: "MEP (Mechanical, Electrical & Plumbing)",
-    image: "/stylish-living-room-with-wooden-furniture-and-warm.jpg",
+    image: "/MEP (Mechanical, Electrical & Plumbing).png",
     category: "mep",
     rating: 4.9,
     reviews: 167,
@@ -181,7 +181,7 @@ const services = [
   {
     id: 5,
     title: "Waterproofing & Structural Repairs",
-    image: "/oak-bedside-table-with-lamp.jpg",
+    image: "/Waterproofing & Structural Repairs.png",
     category: "residential",
     rating: 4.6,
     reviews: 134,
@@ -220,7 +220,7 @@ const services = [
   {
     id: 6,
     title: "Sustainable & Green Construction",
-    image: "/minimal-wooden-bookshelf-with-decor.jpg",
+    image: "/Sustainable & Green Construction.png",
     category: "commercial", 
     rating: 4.8,
     reviews: 92,
@@ -260,7 +260,7 @@ const services = [
   {
     id: 7,
     title: "Interior Works & Furnishing",
-    image: "/interior-package.jpg",
+    image: "/Interior Works & Furnishing.png",
     category: "residential",
     rating: 4.9,
     reviews: 278,
@@ -318,7 +318,7 @@ const services = [
   {
     id: 8,
     title: "Outdoor & Hardscaping Works",
-    image: "/modern-sideboard-console-oak-finish.jpg",
+    image: "/Outdoor & Hardscaping Works.png",
     category: "commercial",
     rating: 4.7,
     reviews: 156,
@@ -350,7 +350,7 @@ const services = [
   {
     id: 9,
     title: "Project Management & Turnkey Solutions",
-    image: "/walnut-coffee-table-with-decor.jpg",
+    image: "/Project Management & Turnkey Solutions.png",
     category: "commercial",
     rating: 4.6,
     reviews: 67,
@@ -381,7 +381,7 @@ const services = [
   {
     id: 10,
     title: "Post-Construction Services",
-    image: "/minimal-floor-lamp-next-to-sofa.jpg",
+    image: "/Post-Construction Services.png",
     category: "commercial",
     rating: 4.8,
     reviews: 189,
@@ -452,7 +452,7 @@ const services = [
   {
     id: 12,
     title: "Digital & Smart Home Solutions",
-    image: "/beige-fabric-sofa-three-seater-modern-interior.jpg",
+    image: "/Digital & Smart Home Solutions.png",
     category: "residential",
     rating: 4.9,
     reviews: 245,
@@ -491,7 +491,7 @@ const services = [
   {
     id: 13,
     title: "Specialized Construction Services",
-    image: "/modern-oak-lounge-chair-in-cozy-living-room.jpg",
+    image: "/Specialized Construction Services.png",
     category: "industrial",
     rating: 4.6,
     reviews: 89,

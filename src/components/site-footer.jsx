@@ -10,12 +10,12 @@ export function SiteFooter() {
   ]
 
   const popularCategories = [
-    { name: "Modern Oak Lounge Chair", href: "/products/1" },
-    { name: "Walnut Coffee Table", href: "/products/2" },
-    { name: "Beige Three-Seater Sofa", href: "/products/3" },
-    { name: "Oak Bedside Table", href: "/products/4" },
-    { name: "Wooden Dining Chair Set", href: "/products/5" },
-    { name: "Modern Sideboard Console", href: "/products/6" }
+    { name: "Modern Oak Lounge Chair", href: "/products" },
+    { name: "Walnut Coffee Table", href: "/products" },
+    { name: "Beige Three-Seater Sofa", href: "/products" },
+    { name: "Oak Bedside Table", href: "/products" },
+    { name: "Wooden Dining Chair Set", href: "/products" },
+    { name: "Modern Sideboard Console", href: "/products" }
   ]
 
   const deliveryCities = [

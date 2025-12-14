@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 const slides = [
@@ -76,12 +77,16 @@ export default function Hero() {
               Civil precision, curated interiors, landscaped living, smart technology, and exquisite furniture - all thoughtfully designed around you.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                Get estimate in 2 mins
-              </Button>
-              <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm">
-                View Our Services
-              </Button>
+              <Link href="/estimate">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  Get estimate in 2 mins
+                </Button>
+              </Link>
+              <Link href="/services">
+                <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-sm">
+                  View Our Services
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

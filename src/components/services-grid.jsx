@@ -19,7 +19,7 @@ const services = [
   {
     id: 1,
     title: "Pre-Construction Services",
-    image: "/Pre-Construction Services.png",
+    image: "/Pre-Construction Services.jpg",
     category: "residential",
     rating: 4.9,
     reviews: 156,
@@ -101,7 +101,7 @@ const services = [
   {
     id: 3,
     title: "Civil Construction",
-    image: "/Civil Construction.png",
+    image: "/Civil Construction.jpg",
     category: "industrial",
     rating: 4.7,
     reviews: 89,
@@ -136,7 +136,7 @@ const services = [
   {
     id: 4,
     title: "MEP (Mechanical, Electrical & Plumbing)",
-    image: "/MEP (Mechanical, Electrical & Plumbing).png",
+    image: "/MEP (Mechanical, Electrical & Plumbing).jpg",
     category: "mep",
     rating: 4.9,
     reviews: 167,
@@ -181,7 +181,7 @@ const services = [
   {
     id: 5,
     title: "Waterproofing & Structural Repairs",
-    image: "/Waterproofing & Structural Repairs.png",
+    image: "/Waterproofing & Structural Repairs.jpg",
     category: "residential",
     rating: 4.6,
     reviews: 134,
@@ -220,7 +220,7 @@ const services = [
   {
     id: 6,
     title: "Sustainable & Green Construction",
-    image: "/Sustainable & Green Construction.png",
+    image: "/Sustainable & Green Construction.jpg",
     category: "commercial", 
     rating: 4.8,
     reviews: 92,
@@ -318,7 +318,7 @@ const services = [
   {
     id: 8,
     title: "Outdoor & Hardscaping Works",
-    image: "/Outdoor & Hardscaping Works.png",
+    image: "/Outdoor & Hardscaping Works.jpg",
     category: "commercial",
     rating: 4.7,
     reviews: 156,
@@ -350,7 +350,7 @@ const services = [
   {
     id: 9,
     title: "Project Management & Turnkey Solutions",
-    image: "/Project Management & Turnkey Solutions.png",
+    image: "/Project Management & Turnkey Solutions.jpg",
     category: "commercial",
     rating: 4.6,
     reviews: 67,
@@ -381,7 +381,7 @@ const services = [
   {
     id: 10,
     title: "Post-Construction Services",
-    image: "/Post-Construction Services.png",
+    image: "/Post-Construction Services.jpg",
     category: "commercial",
     rating: 4.8,
     reviews: 189,
@@ -422,7 +422,7 @@ const services = [
   {
     id: 11,
     title: "Health, Safety & Compliance",
-    image: "/wooden-dining-chair-set-modern-kitchen.jpg",
+    image: "/Health, Safety & Compliance.jpg",
     category: "industrial",
     rating: 4.7,
     reviews: 134,
@@ -452,7 +452,7 @@ const services = [
   {
     id: 12,
     title: "Digital & Smart Home Solutions",
-    image: "/Digital & Smart Home Solutions.png",
+    image: "/Digital & Smart Home Solutions.jpg",
     category: "residential",
     rating: 4.9,
     reviews: 245,
@@ -491,7 +491,7 @@ const services = [
   {
     id: 13,
     title: "Specialized Construction Services",
-    image: "/Specialized Construction Services.png",
+    image: "/Specialized Construction Services.jpg",
     category: "industrial",
     rating: 4.6,
     reviews: 89,

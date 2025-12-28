@@ -6,7 +6,7 @@ export default function ServicesScroller() {
   const services = [
     {
       title: "Pre-Construction Services",
-      image: "/warm-interior-story.jpg",
+      image: "/Pre-Construction Services.jpg",
       subServices: [
         "Site & Planning Support",
         "Feasibility Studies", 
@@ -17,7 +17,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Design & Architecture", 
-      image: "/warm-interior-vision.jpg",
+      image: "/Design & Architecture.jpg",
       subServices: [
         "Architectural Design",
         "Structural Engineering & RCC Design",
@@ -28,7 +28,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Civil Construction",
-      image: "/woodworker-workshop.png",
+      image: "/Civil Construction.jpg",
       subServices: [
         "Core Construction",
         "Site Development",
@@ -39,7 +39,7 @@ export default function ServicesScroller() {
     },
     {
       title: "MEP (Mechanical, Electrical & Plumbing)",
-      image: "/stylish-living-room-with-wooden-furniture-and-warm.jpg",
+      image: "/MEP (Mechanical, Electrical & Plumbing).jpg",
       subServices: [
         "Electrical Works",
         "Mechanical Works", 
@@ -50,7 +50,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Waterproofing & Structural Repairs",
-      image: "/modern-sideboard-console-oak-finish.jpg",
+      image: "/Waterproofing & Structural Repairs.jpg",
       subServices: [
         "Surface Waterproofing",
         "Structural Maintenance",
@@ -61,7 +61,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Sustainable & Green Construction", 
-      image: "/beige-fabric-sofa-three-seater-modern-interior.jpg",
+      image: "/Sustainable & Green Construction.jpg",
       subServices: [
         "Solar Panel Installation",
         "Rainwater Harvesting",
@@ -72,7 +72,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Interior Works & Furnishing",
-      image: "/modern-oak-lounge-chair-in-cozy-living-room.jpg",
+      image: "/Interior Works & Furnishing.png",
       subServices: [
         "Modular Installations",
         "Furniture & Fixtures",
@@ -83,7 +83,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Outdoor & Hardscaping Works",
-      image: "/walnut-coffee-table-with-decor.jpg",
+      image: "/Outdoor & Hardscaping Works.jpg",
       subServices: [
         "Paving & Pathways",
         "External Additions",
@@ -94,7 +94,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Project Management & Turnkey Solutions",
-      image: "/oak-bedside-table-with-lamp.jpg",
+      image: "/Project Management & Turnkey Solutions.jpg",
       subServices: [
         "Turnkey Contracting",
         "EPC Model",
@@ -105,7 +105,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Post-Construction Services",
-      image: "/wooden-dining-chair-set-modern-kitchen.jpg",
+      image: "/Post-Construction Services.jpg",
       subServices: [
         "AMC Contracts",
         "Structural Safety Inspections",
@@ -116,7 +116,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Health, Safety & Compliance",
-      image: "/minimal-wooden-bookshelf-with-decor.jpg",
+      image: "/Health, Safety & Compliance.jpg",
       subServices: [
         "Site Safety Audits",
         "Environmental Compliance",
@@ -127,7 +127,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Digital & Smart Home Solutions",
-      image: "/minimal-floor-lamp-next-to-sofa.jpg",
+      image: "/Digital & Smart Home Solutions.jpg",
       subServices: [
         "Home Automation",
         "Security & Monitoring",
@@ -138,7 +138,7 @@ export default function ServicesScroller() {
     },
     {
       title: "Specialized Construction Services",
-      image: "/interior-package.jpg",
+      image: "/Specialized Construction Services.jpg",
       subServices: [
         "Industrial Construction",
         "Institutional Buildings",

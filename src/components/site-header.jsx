@@ -193,7 +193,7 @@ export function SiteHeader() {
         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
           <img src="/placeholder-logo.png" alt="Archik Constructions logo" className="h-8 w-8" />
           <span className="font-semibold text-white text-lg">
-            <span className="hidden lg:inline">Archik Constructions</span>
+            <span className="hidden lg:inline">Archik Construction</span>
             <span className="lg:hidden">Archik</span>
           </span>
         </Link>

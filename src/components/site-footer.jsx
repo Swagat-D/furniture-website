@@ -155,7 +155,7 @@ export function SiteFooter() {
         {/* Copyright */}
         <div className="border-t border-slate-700 mt-6 pt-6 text-center">
           <p className="text-gray-400 text-sm">
-            © {new Date().getFullYear()} Archik Constructions. All rights reserved.
+            © {new Date().getFullYear()} Archik Construction. All rights reserved.
           </p>
         </div>
       </div>

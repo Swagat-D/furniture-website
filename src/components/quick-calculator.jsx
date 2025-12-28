@@ -228,9 +228,9 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { label: "Construction", value: "construction", rate: "₹1,800/sq.ft" },
-                { label: "Interior Design", value: "interior", rate: "₹2,000/sq.ft" },
-                { label: "Renovation", value: "renovation", rate: "₹1,900/sq.ft" }
+                { label: "Construction", value: "construction", },
+                { label: "Interior Design", value: "interior",  },
+                { label: "Renovation", value: "renovation", }
               ].map((type) => (
                 <button
                   key={type.value}
@@ -264,14 +264,14 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { label: "1 BHK", value: "1bhk", rate: "₹1,650/sq.ft" },
-                { label: "2 BHK", value: "2bhk", rate: "₹1,750/sq.ft" },
-                { label: "3 BHK", value: "3bhk", rate: "₹1,900/sq.ft" },
-                { label: "Villa", value: "villa", rate: "₹2,200/sq.ft" },
-                { label: "Duplex", value: "duplex", rate: "₹2,000/sq.ft" },
-                { label: "Commercial", value: "commercial", rate: "₹2,000/sq.ft" },
-                { label: "Office", value: "office", rate: "₹1,850/sq.ft" },
-                { label: "Retail", value: "retail", rate: "₹1,900/sq.ft" }
+                { label: "1 BHK", value: "1bhk",  },
+                { label: "2 BHK", value: "2bhk",  },
+                { label: "3 BHK", value: "3bhk",  },
+                { label: "Villa", value: "villa", },
+                { label: "Duplex", value: "duplex",  },
+                { label: "Commercial", value: "commercial", },
+                { label: "Office", value: "office", },
+                { label: "Retail", value: "retail",  }
               ].map(({ label, value, rate }) => (
                 <button
                   key={value}
@@ -324,8 +324,8 @@ export default function QuickCalculator() {
                   />
                 </div>
                 <div className="flex justify-between text-sm text-gray-500">
-                  <span>₹10,000</span>
-                  <span>₹1,00,000</span>
+                  <span>10,000 sq.ft</span>
+                  <span>1,00,000 sq.ft</span>
                 </div>
               </div>
             </div>
@@ -345,10 +345,10 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { value: "shell_core", label: "Shell & Core", desc: "Only structural (0.8x multiplier)" },
-                { value: "design_only", label: "Design Only", desc: "No execution (0.6x multiplier)" },
-                { value: "turnkey", label: "Turnkey", desc: "Complete end-to-end delivery (1x)" },
-                { value: "custom_furniture", label: "Custom Furniture", desc: "Add-on: ₹500/sq.ft" }
+                { value: "shell_core", label: "Shell & Core", desc: "Only structural " },
+                { value: "design_only", label: "Design Only", desc: "No execution" },
+                { value: "turnkey", label: "Turnkey", desc: "Complete end-to-end delivery " },
+                { value: "custom_furniture", label: "Custom Furniture", desc: "Add-on" }
               ].map(({ value, label, desc }) => (
                 <button
                   key={value}
@@ -382,10 +382,10 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { value: "basic", label: "Basic", desc: "Entry-level quality (1x multiplier)" },
-                { value: "standard", label: "Standard", desc: "Balanced materials & finish (1.1x)" },
-                { value: "premium", label: "Premium", desc: "High-end finish, luxury detailing (1.25x)" },
-                { value: "luxury", label: "Luxury", desc: "Ultra premium materials (1.4x)" }
+                { value: "basic", label: "Basic", desc: "Entry-level quality " },
+                { value: "standard", label: "Standard", desc: "Balanced materials & finish " },
+                { value: "premium", label: "Premium", desc: "High-end finish, luxury detailing " },
+                { value: "luxury", label: "Luxury", desc: "Ultra premium materials " }
               ].map(({ value, label, desc }) => (
                 <button
                   key={value}
@@ -419,10 +419,10 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { key: "smartHome", label: "Smart Home Integration", percentage: "10% of total" },
-                { key: "landscaping", label: "Landscaping", percentage: "8% of total" },
-                { key: "solarPanel", label: "Solar Panel Installation", percentage: "6% of total" },
-                { key: "security", label: "Security System", percentage: "5% of total" }
+                { key: "smartHome", label: "Smart Home Integration", },
+                { key: "landscaping", label: "Landscaping", },
+                { key: "solarPanel", label: "Solar Panel Installation",  },
+                { key: "security", label: "Security System", }
               ].map(({ key, label, percentage }) => (
                 <label
                   key={key}
@@ -457,9 +457,9 @@ export default function QuickCalculator() {
             </div>
             <div className="space-y-4">
               {[
-                { value: "3_6_months", label: "3-6 months", desc: "Standard timeline (1x)" },
-                { value: "1_3_months", label: "1-3 months", desc: "Fast track (1.1x multiplier)" },
-                { value: "within_1_month", label: "Within 1 month", desc: "Very fast (1.15x multiplier)" }
+                { value: "3_6_months", label: "3-6 months", desc: "Standard timeline " },
+                { value: "1_3_months", label: "1-3 months", desc: "Fast track" },
+                { value: "within_1_month", label: "Within 1 month", desc: "Very fast " }
               ].map(({ value, label, desc }) => (
                 <button
                   key={value}

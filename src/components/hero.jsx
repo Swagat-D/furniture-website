@@ -11,7 +11,7 @@ const slides = [
     category: "Civil Construction"
   },
   {
-    src: "https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=1920&q=80",
+    src: "/image 2.jpg ",
     alt: "Waterproofing and structural repair services",
     category: "Waterproofing & Repairs"
   },
@@ -26,7 +26,7 @@ const slides = [
   //   category: "Landscaping"
   // },
   {
-    src: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1920&q=80",
+    src: "/image4.jpg",
     alt: "Post-construction cleaning and finishing",
     category: "Post-Construction"
   },

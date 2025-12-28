@@ -70,8 +70,8 @@ export default function ArchikHomesPage() {
             <h1 className="text-4xl lg:text-6xl font-bold mb-6">
               Archik <span className="text-amber-400">Homes</span>
             </h1>
-            <p className="text-xl lg:text-2xl mb-8 text-slate-200">
-              A specialized branch of Archik Construction focused entirely on Furniture & Interiors
+            <p className="text-xl lg:text-2xl mb-8 text-slate-200 font-bold">
+             Customer Furniture and Complete Solution Available.
             </p>
             <p className="text-lg lg:text-xl mb-12 text-slate-300 max-w-3xl mx-auto">
               From concept to creation, we craft bespoke furniture solutions that transform spaces into extraordinary experiences. Our dedicated team specializes in custom furniture manufacturing and interior design.
